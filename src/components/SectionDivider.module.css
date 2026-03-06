@@ -7,28 +7,43 @@
   pointer-events: none;
 }
 
-/* Both images are full-width; height is auto (preserves 964:728 ratio) */
+/* Both wings share these base styles */
 .imgDark,
+.imgLight {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* White pills: bottom edge on the seam, image extends upward into Hero */
+.imgDark {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+/* Wrapper is top-anchored at the seam; scale(-1,-1) flips both axes so the
+   interior grows downward and horizontally mirrors the sweep correctly */
+.lightWrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* SVG natural height at full width: 728/964 * 100vw ≈ 75.52vw */
+  height: 75.52vw;
+  transform: scale(-1, -1);
+  transform-origin: top left;
+  overflow: hidden;
+}
+
+/* Dark pills: fills the flipped wrapper — no extra transform needed */
 .imgLight {
   position: absolute;
   left: 0;
+  top: 0;
   width: 100%;
   height: auto;
-  display: block;
-}
-
-/* White pills: bottom edge sits on the seam, image grows upward into Hero */
-.imgDark {
-  bottom: 0;
-  transform-origin: bottom center;
-}
-
-/* Dark pills: top edge sits on the seam, image grows downward into Projects.
-   rotate(180deg) flips the sweep so it mirrors the dark wing correctly. */
-.imgLight {
-  top: 0;
-  transform: rotate(180deg);
-  transform-origin: top center;
   filter: invert(1) brightness(0.22);
 }
+
 
