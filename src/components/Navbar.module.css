@@ -1,44 +1,56 @@
 .nav {
   position: fixed;
-  top: 0;
+  top: 1.25rem;
   left: 0;
   right: 0;
   z-index: 100;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 2.5rem;
-  transition: background var(--transition), backdrop-filter var(--transition);
+  justify-content: center;
+  pointer-events: none; /* clicks pass through the invisible wrapper */
 }
 
-/* Frosted-glass effect on scroll */
+/* ── Pill container ── */
+.pill {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 0.6rem 1.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(13, 15, 20, 0.35);
+  backdrop-filter: blur(10px);
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+/* Slightly more opaque + stronger border on scroll */
 .scrolled {
-  background: rgba(13, 15, 20, 0.75);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(124, 131, 253, 0.12);
+  background: rgba(13, 15, 20, 0.72);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 .logo {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   color: var(--clr-accent-soft);
 }
 
 .links {
   display: flex;
-  gap: 2rem;
+  gap: 1.75rem;
   list-style: none;
 }
 
 .link {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--clr-text-muted);
+  color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.04em;
   transition: color var(--transition);
 }
 
 .link:hover {
-  color: var(--clr-accent-soft);
+  color: #fff;
 }

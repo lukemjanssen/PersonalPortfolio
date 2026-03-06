@@ -20,19 +20,22 @@ export default function Navbar() {
 
   return (
     <Motion.nav
-      className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}
+      className={styles.nav}
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
-      <span className={styles.logo}>YN</span>
-      <ul className={styles.links}>
-        {NAV_LINKS.map(({ label, href }) => (
-          <li key={label}>
-            <a href={href} className={styles.link}>{label}</a>
-          </li>
-        ))}
-      </ul>
+      {/* Pill container — always visible, subtle white outline */}
+      <div className={`${styles.pill} ${scrolled ? styles.scrolled : ''}`}>
+        <span className={styles.logo}>YN</span>
+        <ul className={styles.links}>
+          {NAV_LINKS.map(({ label, href }) => (
+            <li key={label}>
+              <a href={href} className={styles.link}>{label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </Motion.nav>
   );
 }
