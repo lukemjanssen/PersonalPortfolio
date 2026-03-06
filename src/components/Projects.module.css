@@ -2,8 +2,8 @@
 .section {
   position: relative;
   background: var(--clr-bg-light);
-  /* Extra top padding so content clears the overlapping divider */
-  padding: 8vw 1.5rem 6rem;
+  /* Top padding keeps content below the overlapping light wing (SVG is ~75vw tall) */
+  padding: 40vw 1.5rem 6rem;
   overflow: visible;
   z-index: 1;
 }

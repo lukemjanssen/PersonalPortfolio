@@ -1,36 +1,34 @@
-.wrapper {
+/* Zero-height anchor sitting exactly on the Hero/Projects boundary */
+.seam {
   position: relative;
   width: 100%;
-  /* Negative margins pull the divider to overlap into hero above and projects below.
-     The SVG aspect ratio is 964:728 ≈ 1.32:1, so at 100vw width each half is ~37.8vw tall.
-     We pull up by that amount so the dark wing sits over the hero's bottom half,
-     and pull down so the light wing sits over the project section's top. */
-  margin-top: -37vw;
-  margin-bottom: -37vw;
-  pointer-events: none;
+  height: 0;
   z-index: 2;
+  pointer-events: none;
 }
 
-/* Each row holds one SVG wing */
-.half {
-  width: 100%;
-  line-height: 0;
-}
-
-/* Dark wing: white pills, natural orientation */
-.imgDark {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Light wing: rotated 180° so the sweep mirrors correctly, pills darkened */
+/* Both images are full-width; height is auto (preserves 964:728 ratio) */
+.imgDark,
 .imgLight {
-  display: block;
+  position: absolute;
+  left: 0;
   width: 100%;
   height: auto;
+  display: block;
+}
+
+/* White pills: bottom edge sits on the seam, image grows upward into Hero */
+.imgDark {
+  bottom: 0;
+  transform-origin: bottom center;
+}
+
+/* Dark pills: top edge sits on the seam, image grows downward into Projects.
+   rotate(180deg) flips the sweep so it mirrors the dark wing correctly. */
+.imgLight {
+  top: 0;
   transform: rotate(180deg);
-  /* invert white pills → black, then dim to near --clr-bg-dark tone */
+  transform-origin: top center;
   filter: invert(1) brightness(0.22);
 }
 

@@ -5,8 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Extra bottom padding so content clears the overlapping divider */
-  padding-bottom: 10vw;
+  /* Bottom padding keeps content above the overlapping dark wing (SVG is ~75vw tall) */
+  padding-bottom: 40vw;
   overflow: visible;
   z-index: 1;
 }
