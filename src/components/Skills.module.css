@@ -22,6 +22,9 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+  /* clip a sliver from the top to hide the sparse trailing pill row
+     that lands right on the Hero/Skills seam after the 180° flip */
+  clip-path: inset(8px 0 0 0);
 }
 
 .wingImg {
@@ -111,7 +114,9 @@
   /* Two equal columns, no divider column */
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
-  align-items: start;
+  align-items: flex-start;
+  column-gap: 3rem;
+
 }
 
 /* ── Vertical divider — hidden ── */
@@ -135,15 +140,19 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  flex-direction: row-reverse;
+
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
 .columnIcon {
   font-size: 1rem;
-  color: rgba(20, 22, 35, 0.3);
+  color: var(--clr-accent-soft);
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-0.15em);
 }
 
 .columnTitle {
@@ -154,12 +163,16 @@
   color: rgba(20, 22, 35, 0.4);
   font-family: var(--font-sans);
   text-align: right;
+  line-height: 1;
 }
 
 /* ── Skill rows — angular, line-driven, in theme with the banners ── */
 .pills {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap-reverse;
+  column-gap: 0.75rem;
+ /* prevent overflow on very tall screens, still allows wrapping on narrower screens */
 }
 
 .pill {
@@ -181,24 +194,26 @@
   transform: translateY(-50%) skewX(-18deg);
   width: 2px;
   height: 60%;
-  background: rgba(20, 22, 35, 0.18);
+  background: var(--clr-accent-soft);
+  opacity: 1;
   transition: background 0.2s ease;
 }
 
-.pill:hover::before {
-  background: rgba(20, 22, 35, 0.5);
-}
-
 .pillName {
-  font-size: clamp(0.7rem, 1.1vw, 0.88rem);
+  font-size: clamp(0.62rem, 2.2vw, 0.88rem);
   font-weight: 600;
   color: #1a1a2e;
   letter-spacing: -0.01em;
   line-height: 1.2;
+  transition: color 0.2s ease;
+}
+
+.pill:hover .pillName {
+  color: var(--clr-accent);
 }
 
 .pillDetail {
-  font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+  font-size: clamp(0.52rem, 1.7vw, 0.72rem);
   color: rgba(20, 22, 35, 0.4);
   font-weight: 400;
   line-height: 1.3;
@@ -207,25 +222,54 @@
 /* ── Tablet: shrink width proportionally ── */
 @media (max-width: 860px) {
   .container {
-    width: 64vw;
+    width: 72vw;
     gap: 0.75rem;
+    padding-right: clamp(0.5rem, 2vw, 1.5rem);
+    padding-left: clamp(0.5rem, 2vw, 1.5rem);
   }
 
   .column {
     gap: 0.4rem;
   }
+
+  .columnTitle {
+    font-size: clamp(0.55rem, 1.5vw, 0.7rem);
+  }
+}
+
+/* ── Narrow tablet: keep two columns but compress further ── */
+@media (max-width: 640px) {
+  .container {
+    width: 88vw;
+    gap: 0.5rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .pill {
+    padding: 0.3rem 0;
+  }
 }
 
 /* ── Mobile: single column, still right-aligned and wave-height clipped ── */
-@media (max-width: 580px) {
+@media (max-width: 480px) {
   .container {
-    width: 82vw;
+    width: 88vw;
     grid-template-columns: 1fr;
     top: calc(6rem + 70px + 1.5rem);
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .heading {
     top: 6rem;
+  }
+
+  /* Remove tick on single-column — no space for it at left edge */
+  .pill::before {
+    display: none;
+  }
+
+  .column {
+    padding-right: 0;
   }
 }

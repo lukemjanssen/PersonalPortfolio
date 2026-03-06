@@ -43,21 +43,21 @@
 
 /* Filled polygon — slightly lighter than the page dark to create contrast */
 .bgFill {
-  fill: rgba(22, 26, 38, 0.72);
+  fill: rgba(34, 37, 48, 0.72);
   /* Noise grain texture via SVG filter applied in CSS */
   filter: url(#grain);
   transition: fill var(--transition);
 }
 
 .scrolled .bgFill {
-  fill: rgba(16, 19, 28, 0.88);
+  fill: rgba(26, 28, 34, 0.92);
 }
 
 /* ── Light section adaptation ── */
 /* When navbar floats over the white Projects section, go fully opaque dark
    so text stays legible against the light background beneath. */
 .onLight .bgFill {
-  fill: rgba(10, 12, 18, 0.98);
+  fill: rgba(20, 22, 30, 0.98);
 }
 
 .onLight .bgEdge {
@@ -78,14 +78,14 @@
 
 /* Border edges — same subtle white for all three visible sides */
 .bgEdge {
-  stroke: rgba(255, 255, 255, 0.18);
+  stroke: rgba(255, 255, 255, 0.38);
   stroke-width: 1;
   fill: none;
   transition: stroke var(--transition);
 }
 
 .scrolled .bgEdge {
-  stroke: rgba(255, 255, 255, 0.28);
+  stroke: rgba(255, 255, 255, 0.50);
 }
 
 /* ── Content sits above SVG ── */

@@ -15,6 +15,9 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+  /* clip a sliver from the top to hide the sparse trailing pill row
+     that sits right on the Skills/Projects seam */
+  clip-path: inset(8px 0 0 0);
 }
 
 .lightWingImg {
@@ -69,7 +72,7 @@
 }
 
 .headingFill {
-  fill: rgba(16, 19, 28, 0.92);  /* dark fill — matches hero/navbar */
+  fill: rgba(26, 28, 34, 0.92);  /* dark fill — matches hero/navbar */
 }
 
 .headingEdge {
@@ -148,6 +151,12 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: transparent;
   color: rgba(255, 255, 255, 0.55);
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.card:hover .lang {
+  border-color: rgba(165, 170, 255, 0.4);
+  color: var(--clr-accent-soft);
 }
 
 .repoName {
@@ -155,6 +164,11 @@
   font-weight: 700;
   color: rgba(232, 233, 243, 0.95);
   letter-spacing: -0.01em;
+  transition: color var(--transition);
+}
+
+.card:hover .repoName {
+  color: var(--clr-accent-soft);
 }
 
 .desc {
@@ -189,5 +203,5 @@
 }
 
 .card:hover .extIcon {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--clr-accent-soft);
 }

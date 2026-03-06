@@ -18,7 +18,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 0;
+  bottom: -6px;
   width: 100%;
   height: auto;
   display: block;
@@ -91,7 +91,7 @@
 /* ── Tagline ── */
 .tagline {
   font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--clr-text-muted);
+  color: #b8bdd4;
   font-weight: 400;
 }
 
@@ -129,22 +129,22 @@
 }
 
 .ctaFill {
-  fill: rgba(16, 19, 28, 0.92);
+  fill: rgba(26, 28, 34, 0.92);
   transition: fill 0.3s ease;
 }
 
 .cta:hover .ctaFill {
-  fill: rgba(22, 26, 38, 0.98);
+  fill: rgba(34, 37, 48, 0.98);
 }
 
 .ctaEdge {
-  stroke: rgba(255, 255, 255, 0.18);
+  stroke: rgba(255, 255, 255, 0.38);
   stroke-width: 1;
   fill: none;
 }
 
 .cta:hover .ctaEdge {
-  stroke: rgba(255, 255, 255, 0.32);
+  stroke: var(--clr-accent-soft);
 }
 
 /* Text label — padded well clear of both diagonal cuts */
@@ -155,7 +155,7 @@
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--clr-accent-soft);
   white-space: nowrap;
   text-transform: uppercase;
   transition: color 0.3s ease;

@@ -1,8 +1,8 @@
 /* ── Global Design Tokens ── */
 :root {
   /* Dark palette */
-  --clr-bg-dark: #0d0f14;
-  --clr-bg-dark-2: #13161e;
+  --clr-bg-dark: #1a1c22;
+  --clr-bg-dark-2: #21242d;
   --clr-accent: #7c83fd;
   --clr-accent-soft: #a5aaff;
 
