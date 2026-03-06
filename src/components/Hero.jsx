@@ -39,22 +39,23 @@ function waveEdgeFraction(t) {
 function computeWaveMR(elRef, waveRef, gap = 64) {
   const el   = elRef?.current;
   const wave = waveRef?.current;
-  if (!el || !wave) return 0;
+  if (!el || !wave) return null;
 
   const wR = wave.getBoundingClientRect();
-  const eR = el.getBoundingClientRect();
-  if (wR.height === 0) return 0;
+  if (wR.height === 0 || wR.width === 0) return null; // wave not laid out yet
 
-  // Vertical midpoint of the element, relative to the wave image top
-  const elMidY   = eR.top + eR.height / 2;
-  const t        = (elMidY - wR.top) / wR.height;
+  // Use offsetTop/offsetHeight (layout position, unaffected by CSS transforms
+  // like Framer Motion's y:30 initial state) to get the true vertical midpoint.
+  const elMidY = el.offsetTop + el.offsetHeight / 2;
+  // offsetTop is relative to offsetParent — convert to screen coords via wave's rect
+  const heroRect = wave.parentElement?.getBoundingClientRect() ?? wR;
+  const elMidYScreen = heroRect.top + elMidY;
+  const t = (elMidYScreen - wR.top) / wR.height;
 
   // Absolute screen X of the wave left edge at that height
   const edgeFrac = waveEdgeFraction(t);
   const waveAbsX = wR.left + edgeFrac * wR.width;
 
-  // marginRight = distance from the wave edge to the viewport right wall,
-  // plus a gap so the text sits just clear of the pattern edge.
   return Math.max(0, window.innerWidth - waveAbsX + gap);
 }
 
@@ -92,26 +93,36 @@ function WaveName({ word, rowOffset = 0, marginRight = 0, forwardRef = null }) {
 
 export default function Hero() {
   const waveRef  = useRef(null);
-  const greetRef = useRef(null);
+//   const greetRef = useRef(null);
   const lukRef   = useRef(null);
   const janRef   = useRef(null);
   const tagRef   = useRef(null);
   const ctaRef   = useRef(null);
 
-  const [mr, setMr] = useState({ greet: 0, luk: 0, jan: 0, tag: 0, cta: 0 });
+  const [mr, setMr] = useState(null); // null = not yet computed
+
+  const recalcRef = useRef(null);
 
   const recalc = useCallback(() => {
-    // rAF ensures the browser has finished layout before we read rects
     requestAnimationFrame(() => {
-      setMr({
-        greet : computeWaveMR(greetRef, waveRef),
-        luk   : computeWaveMR(lukRef,   waveRef),
-        jan   : computeWaveMR(janRef,   waveRef),
-        tag   : computeWaveMR(tagRef,   waveRef, 64),
-        cta   : computeWaveMR(ctaRef,   waveRef, 16), // negative gap shifts CTA right of wave edge
+      requestAnimationFrame(() => {
+        const luk = computeWaveMR(lukRef,  waveRef, 224);
+        const jan = computeWaveMR(janRef,  waveRef, 200);
+        const tag = computeWaveMR(tagRef,  waveRef, 256);
+        const cta = computeWaveMR(ctaRef,  waveRef, 200);
+
+        // Wave not laid out yet — retry next frame
+        if (luk === null || jan === null) {
+          requestAnimationFrame(() => recalcRef.current?.());
+          return;
+        }
+
+        setMr({ luk, jan, tag: tag ?? 0, cta: cta ?? 0 });
       });
     });
   }, []);
+
+  useEffect(() => { recalcRef.current = recalc; }, [recalc]);
 
   useEffect(() => {
     const wave = waveRef.current;
@@ -123,8 +134,13 @@ export default function Hero() {
       wave.addEventListener('load', recalc, { once: true });
     }
 
+    // Re-run after all fonts are decoded — Syne loading shifts row heights
+    // which changes vertical midpoints and thus the wave edge lookup result.
+    document.fonts.ready.then(recalc);
+
     const ro = new ResizeObserver(recalc);
     ro.observe(document.documentElement);
+    ro.observe(wave);
     return () => ro.disconnect();
   }, [recalc]);
 
@@ -135,6 +151,7 @@ export default function Hero() {
         ref={waveRef}
         src={VectorSrc}
         className={styles.darkWing}
+        onLoad={recalc}
         alt=""
         aria-hidden="true"
       />
@@ -144,28 +161,29 @@ export default function Hero() {
           className={styles.text}
           variants={container}
           initial="hidden"
-          animate="show"
+          animate={mr ? "show" : "hidden"}
+          style={{ opacity: mr ? undefined : 0 }}
         >
 
-          <Motion.p
+          {/* <Motion.p
             ref={greetRef}
             className={styles.greeting}
             style={{ marginRight: mr.greet }}
             variants={item}
           >
             Hi, I&apos;m
-          </Motion.p>
+          </Motion.p> */}
 
           {/* Name rows are direct children of .text so margin-left:auto applies
               identically to greeting/tagline/CTA. marginRight from JS pins the
               right edge to the wave boundary at each row's vertical midpoint.  */}
-          <WaveName word="LUKE"    rowOffset={0} marginRight={mr.luk} forwardRef={lukRef} />
-          <WaveName word="JANSSEN" rowOffset={4} marginRight={mr.jan} forwardRef={janRef} />
+          <WaveName word="LUKE"    rowOffset={0} marginRight={mr?.luk ?? 0} forwardRef={lukRef} />
+          <WaveName word="JANSSEN" rowOffset={4} marginRight={mr?.jan ?? 0} forwardRef={janRef} />
 
           <Motion.p
             ref={tagRef}
             className={styles.tagline}
-            style={{ marginRight: mr.tag }}
+            style={{ marginRight: mr?.tag ?? 0 }}
             variants={item}
           >
             UX/UI Engineer
@@ -175,7 +193,7 @@ export default function Hero() {
             ref={ctaRef}
             href="#projects"
             className={styles.cta}
-            style={{ marginRight: mr.cta }}
+            style={{ marginRight: mr?.cta ?? 0 }}
             variants={item}
             whileHover={{}}
             whileTap={{ scale: 0.97 }}

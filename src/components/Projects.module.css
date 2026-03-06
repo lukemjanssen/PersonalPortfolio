@@ -2,10 +2,8 @@
 .section {
   position: relative;
   background: var(--clr-bg-light);
-  /* min-height ensures section is tall enough even with few cards */
   min-height: 100vh;
-  /* No giant padding-top — container handles its own offset below the wave */
-  padding: 0 1.5rem 6rem;
+  padding: 0 0 6rem;
   overflow: hidden;
   z-index: 1;
 }
@@ -36,8 +34,9 @@
   z-index: 2;
   max-width: 1100px;
   margin: 0 auto;
-  /* Push content below the wave — wave is 68.13vw tall, add breathing room */
   padding-top: calc(68.13vw + 3rem);
+  padding-left: clamp(1.5rem, 5vw, 3rem);
+  padding-right: clamp(1.5rem, 5vw, 3rem);
 }
 
 /* Section heading — absolutely positioned, right-aligned, sits just below wave */
@@ -56,8 +55,6 @@
   position: absolute;
   inset: 0;
   clip-path: polygon(19.6% 0, 100% 0, 100% 100%, 0 100%);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
   z-index: 0;
   pointer-events: none;
 }
@@ -74,11 +71,11 @@
 }
 
 .headingFill {
-  fill: rgba(13, 15, 20, 0.78);   /* same dark glass as NavbarAlt */
+  fill: rgba(245, 245, 247, 0.96);  /* light bg — matches --clr-bg-light */
 }
 
 .headingEdge {
-  stroke: rgba(255, 255, 255, 0.18);
+  stroke: rgba(20, 22, 35, 0.18);   /* dark border, inverse of navbar */
   stroke-width: 1;
   fill: none;
 }
@@ -93,7 +90,7 @@
 .title {
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 800;
-  color: #e8e9f3;                 /* light text on dark banner */
+  color: #1a1a2e;                  /* dark text on light banner */
   letter-spacing: -0.03em;
   font-family: var(--font-display);
 }
@@ -101,7 +98,7 @@
 .sub {
   margin-top: 0.25rem;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(20, 22, 35, 0.5);   /* dark muted, inverse of white/0.5 */
   font-weight: 400;
   letter-spacing: 0.01em;
 }
