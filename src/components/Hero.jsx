@@ -14,7 +14,7 @@ const item = {
 
 export default function Hero() {
   return (
-    <section id="hero" className={`${styles.hero} stars-dark`}>
+    <section id="hero" className={styles.hero}>
 
       {/* Animated clouds — left cluster */}
       <Cloud className={styles.cloudLeft1} delay={0} duration={18} amplitude={22} />

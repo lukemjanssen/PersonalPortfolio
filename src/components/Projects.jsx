@@ -27,7 +27,7 @@ export default function Projects() {
   return (
     <MotionSection
       id="projects"
-      className={`${styles.section} stars-light`}
+      className={styles.section}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.1 }}

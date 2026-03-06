@@ -1,16 +1,20 @@
 .wrapper {
   display: block;
   width: 100%;
-  /* Negative margin pulls sections into the divider so no background gap shows */
-  margin-top: -1px;
-  margin-bottom: -1px;
+  /* Pull the divider up into the hero and down into projects so the sweep
+     visually climbs halfway into each section */
+  margin-top: -220px;
+  margin-bottom: -220px;
   line-height: 0;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
+  z-index: 2; /* sits above section content backgrounds, below text */
+  pointer-events: none;
 }
 
 .svg {
   display: block;
   width: 100%;
-  /* Aspect ratio matches viewBox 1440×500 — preserves the diagonal sweep shape */
-  height: clamp(180px, 22vw, 360px);
+  /* Fixed pixel height matches the 900-unit tall viewBox comfortably */
+  height: clamp(300px, 40vw, 620px);
 }

@@ -11,103 +11,89 @@ function seededRand(seed) {
 }
 
 /**
- * The Figma design has two diagonal sweep wings that are 180° mirrors:
+ * Reproduces the Figma scatter pattern analytically.
  *
- *  Dark wing  (white dashes): occupies bottom-right of the dark half —
- *    rows sweep from bottom-left → top-right, shrinking/fading as they rise.
+ * The Figma SVG (viewBox 1066×728) has a single diagonal sweep boundary:
+ *   top-right corner → bottom-left corner (a straight diagonal).
+ * Pills ONLY appear to the RIGHT of this boundary line.
  *
- *  Light wing (dark dashes):  occupies top-left of the light half —
- *    exact 180° rotation, rows sweep from top-right → bottom-left.
+ * We replicate both wings inside one unified viewBox:
+ *   - Dark wing  (white pills): occupies the RIGHT of the diagonal in the top half
+ *   - Light wing (dark pills):  180° rotation — occupies LEFT of diagonal in bottom half
  *
- * Both wings live in the same viewBox, stacked so the seam sits at H/2.
- * The "sweep" shape: for each row band the dashes only occupy the
- * right portion of that band (dark) or left portion (light), and that
- * occupied width shrinks linearly as the row moves away from the seam.
+ * The "wave" that climbs halfway up the section comes from placing the
+ * viewBox so it overlaps into both the Hero and Projects sections.
  */
-function buildDashes(W, H) {
-  const rand     = seededRand(99);
-  const seam     = H / 2;
-  const dashes   = [];
-
-  /* How many row bands in each half */
-  const ROWS     = 22;
-  /* Dashes per row (more near seam, fewer further away) */
-  const MAX_DASH = 18;
+function buildPills(VW, VH) {
+  const rand  = seededRand(77);
+  const pills = [];
+  const TOTAL = 700; // match Figma's ~713 pills
 
   for (let wing = 0; wing < 2; wing++) {
-    const isDark = wing === 0; // dark-side wing = white dashes
+    const isDark = wing === 0; // dark wing = white pills
 
-    for (let row = 0; row < ROWS; row++) {
-      /* t: 0 = right at seam, 1 = furthest from seam */
-      const t = row / (ROWS - 1);
+    for (let i = 0; i < TOTAL / 2; i++) {
+      // Raw coords in 0..1 space, then we'll filter by the diagonal boundary
+      const rx = rand();
+      const ry = rand();
 
-      /* Row y-centre inside its half */
-      const rowH  = (seam / ROWS) * (1 + t * 0.6); // rows get taller further out
-      const yBase = isDark
-        ? seam - rowH * (row + 0.5)                // above seam (dark half)
-        : seam + rowH * (row + 0.5);               // below seam (light half)
+      // Diagonal boundary: at ry=0 (top) the boundary x = 1.0 (far right)
+      //                    at ry=1 (bottom) the boundary x = 0.0 (far left)
+      // Pills only exist to the RIGHT of the line: rx > (1 - ry)
+      const boundary = 1 - ry;
+      if (rx < boundary) { rand(); rand(); continue; } // skip — consume extra randoms for stability
 
-      if (yBase < 0 || yBase > H) continue;
+      // Distance from the diagonal boundary (0 = on edge, 1 = far right)
+      const dist = (rx - boundary) / ry; // normalised
 
-      /* The sweep shape: available x-width narrows as we move away from seam.
-         Dark wing → right portion only (start shifts right with t).
-         Light wing → left portion only (end shifts left with t). */
-      const availW    = W * (1 - t * 0.78);   // shrinks to ~22% of width at far end
-      const xOffset   = isDark ? W - availW : 0; // dark=right side, light=left side
+      // Pill size: larger near the boundary, tiny far away
+      const rx2    = Math.max(2, 28 * (1 - dist * 0.7) * (0.3 + rand() * 0.7));
+      const ry2    = rx2 * (0.18 + rand() * 0.14); // pill height ~18-32% of width
+      const opacity = (1 - dist * 0.8) * (0.4 + rand() * 0.6);
 
-      const count = Math.max(2, Math.round(MAX_DASH * (1 - t * 0.82)));
-
-      for (let d = 0; d < count; d++) {
-        /* Spread dashes within the available width band */
-        const xPos     = xOffset + rand() * availW;
-        const yJitter  = (rand() - 0.5) * rowH * 1.2;
-
-        /* Longer dashes near the seam, shorter further out */
-        const maxLen   = 70 * (1 - t * 0.65);
-        const len      = Math.max(3, maxLen * (0.3 + rand() * 0.7));
-        const opacity  = (1 - t) * (0.45 + rand() * 0.55);
-
-        dashes.push({
-          x: xPos,
-          y: yBase + yJitter,
-          len,
-          opacity,
+      if (isDark) {
+        // Wing 1: white pills in the TOP half of the viewBox (dark bg)
+        pills.push({ cx: rx * VW, cy: ry * (VH / 2), rx: rx2, ry: ry2, opacity, isDark });
+      } else {
+        // Wing 2: dark pills in BOTTOM half — 180° rotation of the dark wing
+        pills.push({
+          cx: (1 - rx) * VW,
+          cy: VH / 2 + (1 - ry) * (VH / 2),
+          rx: rx2, ry: ry2, opacity,
           isDark,
         });
       }
     }
   }
 
-  return dashes;
+  return pills;
 }
 
 export default function SectionDivider() {
-  const W = 1440;
-  const H = 500; // tall viewBox gives the sweeping diagonal room to breathe
+  const VW = 1440;
+  const VH = 900; // tall so the sweep climbs well into both sections
 
-  const dashes = useMemo(() => buildDashes(W, H), []);
+  const pills = useMemo(() => buildPills(VW, VH), []);
 
   return (
     <div className={styles.wrapper} aria-hidden="true">
       <svg
-        viewBox={`0 0 ${W} ${H}`}
+        viewBox={`0 0 ${VW} ${VH}`}
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
         className={styles.svg}
       >
         {/* Solid section backgrounds */}
-        <rect x="0" y="0"     width={W} height={H / 2} fill="var(--clr-bg-dark)"  />
-        <rect x="0" y={H / 2} width={W} height={H / 2} fill="var(--clr-bg-light)" />
+        <rect x="0" y="0"      width={VW} height={VH / 2} fill="var(--clr-bg-dark)"  />
+        <rect x="0" y={VH / 2} width={VW} height={VH / 2} fill="var(--clr-bg-light)" />
 
-        {/* Scatter dashes: white on dark side, near-black on light side */}
-        {dashes.map(({ x, y, len, opacity, isDark }, i) => (
-          <line
+        {/* Pill-shaped scatter dashes */}
+        {pills.map(({ cx, cy, rx, ry, opacity, isDark }, i) => (
+          <ellipse
             key={i}
-            x1={x}       y1={y}
-            x2={x + len} y2={y}
-            stroke={isDark ? '#ffffff' : '#1a1a2e'}
-            strokeWidth={2}
-            strokeLinecap="round"
+            cx={cx} cy={cy}
+            rx={rx} ry={ry}
+            fill={isDark ? '#ffffff' : '#1a1a2e'}
             opacity={opacity}
           />
         ))}
