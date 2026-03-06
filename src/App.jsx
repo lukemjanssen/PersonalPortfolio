@@ -1,5 +1,5 @@
 import './index.css';
-import Navbar   from './components/Navbar';
+import NavbarAlt from './components/NavbarAlt';
 import Hero     from './components/Hero';
 import Projects from './components/Projects';
 import Footer   from './components/Footer';
@@ -7,7 +7,7 @@ import Footer   from './components/Footer';
 export default function App() {
   return (
     <>
-      <Navbar />
+      <NavbarAlt />
       <main>
         {/* Dark hero — white pill pattern grows up from the bottom edge */}
         <Hero />

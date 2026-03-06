@@ -1,0 +1,97 @@
+/*
+ * NavbarAlt — top-left, diagonal right edge mirroring the wave pattern.
+ * Shape + borders are drawn by an inline SVG so clip-path never truncates lines.
+ */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  /* Right padding larger to keep text away from the diagonal edge */
+  padding: 1rem 5rem 1rem 2rem;
+  /* No background/border here — SVG handles it */
+  transition: opacity var(--transition);
+}
+
+/* Frosted glass blur applied via ::before so it clips to the same polygon shape.
+   clip-path on ::before only clips the blur effect, not the SVG borders. */
+.nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 0 100%);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── SVG background layer ── */
+.bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Filled polygon — slightly lighter than the page dark to create contrast */
+.bgFill {
+  fill: rgba(22, 26, 38, 0.72);
+  /* Noise grain texture via SVG filter applied in CSS */
+  filter: url(#grain);
+  transition: fill var(--transition);
+}
+
+.scrolled .bgFill {
+  fill: rgba(16, 19, 28, 0.88);
+}
+
+/* Border edges — same subtle white for all three visible sides */
+.bgEdge {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+  fill: none;
+  transition: stroke var(--transition);
+}
+
+.scrolled .bgEdge {
+  stroke: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Content sits above SVG ── */
+.logo {
+  position: relative;
+  z-index: 1;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--clr-accent-soft);
+  flex-shrink: 0;
+}
+
+.links {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 1.75rem;
+  list-style: none;
+}
+
+.link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.04em;
+  transition: color var(--transition);
+}
+
+.link:hover {
+  color: #fff;
+}
