@@ -38,15 +38,35 @@ export default function Projects() {
         <img src={VectorSrc} className={styles.lightWingImg} alt="" />
       </div>
 
-      <div className={styles.container}>
-        {/* Section heading */}
-        <MotionDiv
-          className={styles.heading}
-          variants={cardVariants}
+      {/* Section heading — absolutely positioned top-right, diagonal cut on the left */}
+      <MotionDiv
+        className={styles.heading}
+        initial={{ opacity: 0, x: 40 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
+        {/* SVG: fixed-pixel viewBox so diagonal is always a fixed width
+             regardless of how wide the element stretches. Height ~70px, diagonal = 20px. */}
+        <svg
+          className={styles.headingBg}
+          viewBox="0 0 1120 70"
+          preserveAspectRatio="none"
+          aria-hidden="true"
         >
+          <polygon points="220,0 1120,0 1120,70 0,70" className={styles.headingFill} />
+          <line x1="220" y1="0"  x2="1120" y2="0"  className={styles.headingEdge} vectorEffect="non-scaling-stroke" />
+          <line x1="0"   y1="70" x2="1120" y2="70" className={styles.headingEdge} vectorEffect="non-scaling-stroke" />
+          <line x1="220" y1="0"  x2="0"    y2="70" className={styles.headingEdge} vectorEffect="non-scaling-stroke" />
+        </svg>
+
+        <div className={styles.headingContent}>
           <h2 className={styles.title}>GitHub Projects</h2>
           <p className={styles.sub}>A selection of public repositories</p>
-        </MotionDiv>
+        </div>
+      </MotionDiv>
+
+      <div className={styles.container}>
 
         {/* Loading / error states */}
         {loading && <p className={styles.state}>Loading repos…</p>}

@@ -36,7 +36,7 @@ function waveEdgeFraction(t) {
  * that places the element's right edge flush with the wave's left boundary
  * at the element's vertical midpoint. Returns 0 if refs aren't ready.
  */
-function computeWaveMR(elRef, waveRef) {
+function computeWaveMR(elRef, waveRef, gap = 64) {
   const el   = elRef?.current;
   const wave = waveRef?.current;
   if (!el || !wave) return 0;
@@ -55,8 +55,7 @@ function computeWaveMR(elRef, waveRef) {
 
   // marginRight = distance from the wave edge to the viewport right wall,
   // plus a gap so the text sits just clear of the pattern edge.
-  const GAP = 128; // px — increase to move further left, decrease to tuck closer
-  return Math.max(0, window.innerWidth - waveAbsX + GAP);
+  return Math.max(0, window.innerWidth - waveAbsX + gap);
 }
 
 const container = {
@@ -108,8 +107,8 @@ export default function Hero() {
         greet : computeWaveMR(greetRef, waveRef),
         luk   : computeWaveMR(lukRef,   waveRef),
         jan   : computeWaveMR(janRef,   waveRef),
-        tag   : computeWaveMR(tagRef,   waveRef),
-        cta   : computeWaveMR(ctaRef,   waveRef),
+        tag   : computeWaveMR(tagRef,   waveRef, 64),
+        cta   : computeWaveMR(ctaRef,   waveRef, 16), // negative gap shifts CTA right of wave edge
       });
     });
   }, []);
@@ -154,7 +153,7 @@ export default function Hero() {
             style={{ marginRight: mr.greet }}
             variants={item}
           >
-            Hello, I&apos;m
+            Hi, I&apos;m
           </Motion.p>
 
           {/* Name rows are direct children of .text so margin-left:auto applies
@@ -178,10 +177,25 @@ export default function Hero() {
             className={styles.cta}
             style={{ marginRight: mr.cta }}
             variants={item}
-            whileHover={{ scale: 1.04 }}
+            whileHover={{}}
             whileTap={{ scale: 0.97 }}
           >
-            View My Work
+            {/* SVG: fixed-pixel viewBox so diagonal is always a fixed width
+                 regardless of how wide the element stretches. Height matches
+                 the rendered pill height (~44px). Diagonal shift = 380px. */}
+            <svg
+              className={styles.ctaBg}
+              viewBox="0 0 2100 44"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <polygon points="500,0 2100,0 1600,44 0,44" className={styles.ctaFill} />
+              <line x1="500" y1="0"  x2="2100" y2="0"  className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+              <line x1="0"   y1="44" x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+              <line x1="500" y1="0"  x2="0"    y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+              <line x1="2100" y1="0" x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+            </svg>
+            <span className={styles.ctaLabel}>View My Work</span>
           </Motion.a>
 
         </Motion.div>

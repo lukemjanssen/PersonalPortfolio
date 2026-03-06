@@ -5,7 +5,7 @@
 
 .nav {
   position: fixed;
-  top: 0;
+  top: 1rem;
   left: 0;
   z-index: 100;
   display: flex;
@@ -51,6 +51,29 @@
 
 .scrolled .bgFill {
   fill: rgba(16, 19, 28, 0.88);
+}
+
+/* ── Light section adaptation ── */
+/* When navbar floats over the white Projects section, go fully opaque dark
+   so text stays legible against the light background beneath. */
+.onLight .bgFill {
+  fill: rgba(10, 12, 18, 0.98);
+}
+
+.onLight .bgEdge {
+  stroke: rgba(255, 255, 255, 0.4);
+}
+
+.onLight .logo {
+  color: #fff;
+}
+
+.onLight .link {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.onLight .link:hover {
+  color: #fff;
 }
 
 /* Border edges — same subtle white for all three visible sides */

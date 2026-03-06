@@ -10,11 +10,33 @@ const NAV_LINKS = [
 
 export default function NavbarAlt() {
   const [scrolled, setScrolled] = useState(false);
+  const [onLight, setOnLight]   = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handler);
     return () => window.removeEventListener('scroll', handler);
+  }, []);
+
+  /* Watch the Projects section — switch to opaque dark style whenever the
+     navbar (fixed, ~60px tall) is overlapping the light-background section. */
+  useEffect(() => {
+    const NAV_HEIGHT = 80; // px — approximate bottom of the navbar
+    const check = () => {
+      const target = document.getElementById('projects');
+      if (!target) return;
+      const { top, bottom } = target.getBoundingClientRect();
+      setOnLight(top < NAV_HEIGHT && bottom > 0);
+    };
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check, { passive: true });
+    // Delay first check until after page paint so getBoundingClientRect is accurate
+    const raf = requestAnimationFrame(check);
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   /* SVG strategy: preserveAspectRatio="none" lets it stretch to any nav size.
@@ -23,7 +45,7 @@ export default function NavbarAlt() {
      weight/colour as top and bottom — no clip-path involved, nothing gets cut. */
   return (
     <Motion.nav
-      className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}
+      className={[styles.nav, scrolled ? styles.scrolled : '', onLight ? styles.onLight : ''].filter(Boolean).join(' ')}
       initial={{ x: -40, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}

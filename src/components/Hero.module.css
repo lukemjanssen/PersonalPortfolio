@@ -73,15 +73,17 @@
 .nameRow {
   display: block;
   line-height: 0.88;
+  white-space: nowrap;
 }
 
 .nameLetter {
   display: inline-block;
   font-family: var(--font-display);
-  font-size: clamp(5rem, 14vw, 11rem);
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-size: clamp(1.8rem, 5.5vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: var(--clr-text-primary);
   will-change: transform, opacity;
 }
@@ -93,22 +95,76 @@
   font-weight: 400;
 }
 
-/* ── CTA button ── */
+/* ── CTA button — parallelogram SVG pill, both sides diagonal ── */
 .cta {
-  display: inline-block;
-  padding: 0.75rem 2.2rem;
-  border-radius: 50px;
-  background: var(--clr-accent);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.04em;
-  box-shadow: 0 4px 24px rgba(124, 131, 253, 0.35);
-  transition: box-shadow var(--transition);
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  cursor: pointer;
+  text-decoration: none;
+  height: 44px;
 }
 
-.cta:hover {
-  box-shadow: 0 6px 32px rgba(124, 131, 253, 0.55);
+/* Frosted glass blur clipped to the parallelogram */
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(23.8% 0, 100% 0, 76.2% 100%, 0 100%);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* SVG layer — fill + 4 border edges */
+.ctaBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ctaFill {
+  fill: rgba(16, 19, 28, 0.92);
+  transition: fill 0.3s ease;
+}
+
+.cta:hover .ctaFill {
+  fill: rgba(22, 26, 38, 0.98);
+}
+
+.ctaEdge {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+  fill: none;
+}
+
+.cta:hover .ctaEdge {
+  stroke: rgba(255, 255, 255, 0.32);
+}
+
+/* Text label — padded well clear of both diagonal cuts */
+.ctaLabel {
+  position: relative;
+  z-index: 1;
+  padding: 0.8rem 5rem 0.8rem 6rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  text-align: center;
+  width: 100%;
+}
+
+.cta:hover .ctaLabel {
+  color: #fff;
 }
 
 /* ── Profile image (kept for when photo is added) ── */
