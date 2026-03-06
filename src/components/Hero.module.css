@@ -1,0 +1,114 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background: var(--clr-bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── Background clouds – absolute positioned ── */
+.cloudLeft1  { width: 420px; left: -80px; top: 30%;   opacity: 0.45; }
+.cloudLeft2  { width: 300px; left: -40px; bottom: 12%; opacity: 0.30; }
+.cloudRight1 { width: 380px; right: -70px; top: 25%;  opacity: 0.42; }
+.cloudRight2 { width: 280px; right: -30px; bottom: 18%; opacity: 0.28; }
+
+/* ── Content wrapper ── */
+.inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.8rem;
+}
+
+/* ── Profile image ── */
+.imageWrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(124, 131, 253, 0.35);
+  box-shadow: 0 0 40px rgba(124, 131, 253, 0.2);
+}
+
+/* Placeholder ring when no image is loaded */
+.imageWrap::after {
+  content: '📷';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  border-radius: 50%;
+  border: 3px dashed rgba(124, 131, 253, 0.3);
+  z-index: -1;
+}
+
+/* ── Text block ── */
+.text {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.greeting {
+  font-size: 1rem;
+  color: var(--clr-accent-soft);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.name {
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--clr-text-primary);
+  line-height: 1.1;
+}
+
+.tagline {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--clr-text-muted);
+  font-weight: 400;
+}
+
+/* ── CTA button ── */
+.cta {
+  margin-top: 0.5rem;
+  display: inline-block;
+  padding: 0.75rem 2.2rem;
+  border-radius: 50px;
+  background: var(--clr-accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 24px rgba(124, 131, 253, 0.35);
+  transition: box-shadow var(--transition);
+}
+
+.cta:hover {
+  box-shadow: 0 6px 32px rgba(124, 131, 253, 0.55);
+}
+
+@media (min-width: 768px) {
+  .inner {
+    flex-direction: row;
+    gap: 4rem;
+    text-align: left;
+  }
+  .text { align-items: flex-start; }
+}

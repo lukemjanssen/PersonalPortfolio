@@ -1,0 +1,109 @@
+/* ── Light background section with dark pointillism ── */
+.section {
+  position: relative;
+  background: var(--clr-bg-light);
+  padding: 5rem 1.5rem 6rem;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Section heading */
+.heading {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--clr-text-light-section);
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* State messages */
+.state {
+  text-align: center;
+  color: #888;
+  padding: 2rem 0;
+}
+
+/* ── Card Grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.4rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.4rem 1.5rem 1.25rem;
+  background: var(--clr-bg-light-2);
+  border-radius: var(--radius);
+  border: 1px solid rgba(20, 22, 35, 0.08);
+  box-shadow: 0 4px 18px rgba(20, 22, 35, 0.06);
+  color: var(--clr-text-light-section);
+  transition: box-shadow var(--transition);
+  cursor: pointer;
+}
+
+/* Language badge pill */
+.lang {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.65rem;
+  border-radius: 50px;
+  background: rgba(124, 131, 253, 0.12);
+  color: var(--clr-accent);
+}
+
+.repoName {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--clr-text-light-section);
+}
+
+.desc {
+  font-size: 0.88rem;
+  color: #5a5f75;
+  line-height: 1.55;
+  flex: 1;
+}
+
+/* Stars / forks row */
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.82rem;
+  color: #888;
+  margin-top: 0.4rem;
+}
+
+.stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.extIcon {
+  margin-left: auto;
+  color: var(--clr-accent);
+  opacity: 0.7;
+}

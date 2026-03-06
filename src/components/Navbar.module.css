@@ -1,0 +1,44 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2.5rem;
+  transition: background var(--transition), backdrop-filter var(--transition);
+}
+
+/* Frosted-glass effect on scroll */
+.scrolled {
+  background: rgba(13, 15, 20, 0.75);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(124, 131, 253, 0.12);
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--clr-accent-soft);
+}
+
+.links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--clr-text-muted);
+  letter-spacing: 0.04em;
+  transition: color var(--transition);
+}
+
+.link:hover {
+  color: var(--clr-accent-soft);
+}
