@@ -1,20 +1,36 @@
 .wrapper {
-  display: block;
-  width: 100%;
-  /* Pull the divider up into the hero and down into projects so the sweep
-     visually climbs halfway into each section */
-  margin-top: -220px;
-  margin-bottom: -220px;
-  line-height: 0;
-  overflow: visible;
   position: relative;
-  z-index: 2; /* sits above section content backgrounds, below text */
+  width: 100%;
+  /* Negative margins pull the divider to overlap into hero above and projects below.
+     The SVG aspect ratio is 964:728 ≈ 1.32:1, so at 100vw width each half is ~37.8vw tall.
+     We pull up by that amount so the dark wing sits over the hero's bottom half,
+     and pull down so the light wing sits over the project section's top. */
+  margin-top: -37vw;
+  margin-bottom: -37vw;
   pointer-events: none;
+  z-index: 2;
 }
 
-.svg {
+/* Each row holds one SVG wing */
+.half {
+  width: 100%;
+  line-height: 0;
+}
+
+/* Dark wing: white pills, natural orientation */
+.imgDark {
   display: block;
   width: 100%;
-  /* Fixed pixel height matches the 900-unit tall viewBox comfortably */
-  height: clamp(300px, 40vw, 620px);
+  height: auto;
 }
+
+/* Light wing: rotated 180° so the sweep mirrors correctly, pills darkened */
+.imgLight {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: rotate(180deg);
+  /* invert white pills → black, then dim to near --clr-bg-dark tone */
+  filter: invert(1) brightness(0.22);
+}
+

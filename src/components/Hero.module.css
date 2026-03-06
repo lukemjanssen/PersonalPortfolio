@@ -5,7 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  /* Extra bottom padding so content clears the overlapping divider */
+  padding-bottom: 10vw;
+  overflow: visible;
+  z-index: 1;
 }
 
 /* ── Background clouds – absolute positioned ── */
