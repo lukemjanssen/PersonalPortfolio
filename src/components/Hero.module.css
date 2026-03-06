@@ -5,14 +5,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Bottom padding reserves space so content stays above the dark wing */
-  padding-bottom: 20vw;
+  /* Bottom padding reserves space above the dark wing (75.52vw × 0.45 ≈ 34vw) */
+  padding-bottom: 34vw;
   overflow: hidden;
   z-index: 1;
 }
 
 /* Dark wing: white pill scatter pattern, anchored to the bottom of Hero.
-   It extends upward naturally at full width. z-index 0 keeps it behind content. */
+   scaleY squishes the pills vertically for a finer, cleaner look.
+   transform-origin: bottom keeps the pattern pinned to the section edge. */
 .darkWing {
   position: absolute;
   left: 0;
@@ -22,6 +23,8 @@
   display: block;
   z-index: 0;
   pointer-events: none;
+  transform: scaleY(0.45);
+  transform-origin: bottom center;
 }
 
 /* ── Content wrapper ── */

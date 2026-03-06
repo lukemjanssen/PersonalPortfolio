@@ -2,8 +2,8 @@
 .section {
   position: relative;
   background: var(--clr-bg-light);
-  /* Top padding reserves space so content sits below the light wing */
-  padding: 20vw 1.5rem 6rem;
+  /* Top padding reserves space below the light wing (75.52vw × 0.45 ≈ 34vw) */
+  padding: 34vw 1.5rem 6rem;
   overflow: hidden;
   z-index: 1;
 }
@@ -22,16 +22,15 @@
   z-index: 0;
 }
 
-/* The img is flipped 180° around its own center.
-   Because the wrapper has an explicit height matching the image height,
-   the rotated image stays perfectly within the wrapper bounds —
-   top edge of the rotated image aligns with the top of Projects. */
+/* The img is flipped 180° and squished vertically to match the dark wing's pill thickness.
+   scale(-1, -1) mirrors both axes; scaleY(0.45) is folded in via the Y component.
+   transform-origin: top keeps the pattern pinned to the section edge. */
 .lightWingImg {
   display: block;
   width: 100%;
   height: auto;
-  transform: scale(-1, -1);
-  transform-origin: center center;
+  transform: scale(-1, -0.45);
+  transform-origin: top center;
   /* Convert white pills → dark pills matching the dark bg color */
   filter: invert(1) brightness(0.22);
 }
