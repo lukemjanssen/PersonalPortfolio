@@ -1,6 +1,7 @@
 import { motion as Motion } from 'framer-motion';
-import Cloud from './Cloud';
 import styles from './Hero.module.css';
+// SVG must be uppercase-aliased to satisfy the no-unused-vars eslint rule
+import VectorSrc from '../assets/Vector.svg';
 
 /* Stagger config for text entrance */
 const container = {
@@ -16,13 +17,8 @@ export default function Hero() {
   return (
     <section id="hero" className={styles.hero}>
 
-      {/* Animated clouds — left cluster */}
-      <Cloud className={styles.cloudLeft1} delay={0} duration={18} amplitude={22} />
-      <Cloud className={styles.cloudLeft2} delay={3} duration={24} amplitude={14} />
-
-      {/* Animated clouds — right cluster */}
-      <Cloud className={styles.cloudRight1} delay={1.5} duration={20} amplitude={18} flip />
-      <Cloud className={styles.cloudRight2} delay={5}  duration={26} amplitude={12} flip />
+      {/* Dark wing: white pill pattern anchored at bottom, grows upward */}
+      <img src={VectorSrc} className={styles.darkWing} alt="" aria-hidden="true" />
 
       <div className={styles.inner}>
         {/* Profile image wrapped in clouds */}
@@ -33,8 +29,6 @@ export default function Hero() {
             className={styles.avatar}
             onError={(e) => { e.target.style.display = 'none'; }}
           />
-          {/* Cloud overlay that partially masks the image */}
-          <Cloud className={styles.cloudMaskBottom} delay={0.5} duration={22} amplitude={10} overlay />
         </div>
 
         {/* Text content */}

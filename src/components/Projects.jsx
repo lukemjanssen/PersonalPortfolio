@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { FiStar, FiGitBranch, FiExternalLink } from 'react-icons/fi';
 import { useGitHubRepos } from '../hooks/useGitHubRepos';
 import styles from './Projects.module.css';
+import VectorSrc from '../assets/Vector.svg';
 
 const MotionSection = motion.section;
 const MotionDiv     = motion.div;
@@ -32,6 +33,11 @@ export default function Projects() {
       whileInView="show"
       viewport={{ once: true, amount: 0.1 }}
     >
+      {/* Light wing: same SVG flipped 180° and darkened — anchored to the top of Projects */}
+      <div className={styles.lightWingWrap} aria-hidden="true">
+        <img src={VectorSrc} className={styles.lightWingImg} alt="" />
+      </div>
+
       <div className={styles.container}>
         {/* Section heading */}
         <MotionDiv

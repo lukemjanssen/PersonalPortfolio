@@ -2,15 +2,43 @@
 .section {
   position: relative;
   background: var(--clr-bg-light);
-  /* Top padding keeps content below the overlapping light wing (SVG is ~75vw tall) */
-  padding: 40vw 1.5rem 6rem;
-  overflow: visible;
+  /* Top padding reserves space so content sits below the light wing */
+  padding: 20vw 1.5rem 6rem;
+  overflow: hidden;
   z-index: 1;
+}
+
+/* ── Light wing ── */
+/* Wrapper: full-width, sits at the top of Projects, not participating in flow */
+.lightWingWrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Same aspect ratio as the SVG: 728/964 × 100vw */
+  height: 75.52vw;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* The img is flipped 180° around its own center.
+   Because the wrapper has an explicit height matching the image height,
+   the rotated image stays perfectly within the wrapper bounds —
+   top edge of the rotated image aligns with the top of Projects. */
+.lightWingImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: scale(-1, -1);
+  transform-origin: center center;
+  /* Convert white pills → dark pills matching the dark bg color */
+  filter: invert(1) brightness(0.22);
 }
 
 .container {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   max-width: 1100px;
   margin: 0 auto;
 }

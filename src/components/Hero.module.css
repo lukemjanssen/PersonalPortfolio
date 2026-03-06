@@ -5,22 +5,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Bottom padding keeps content above the overlapping dark wing (SVG is ~75vw tall) */
-  padding-bottom: 40vw;
-  overflow: visible;
+  /* Bottom padding reserves space so content stays above the dark wing */
+  padding-bottom: 20vw;
+  overflow: hidden;
   z-index: 1;
 }
 
-/* ── Background clouds – absolute positioned ── */
-.cloudLeft1  { width: 420px; left: -80px; top: 30%;   opacity: 0.45; }
-.cloudLeft2  { width: 300px; left: -40px; bottom: 12%; opacity: 0.30; }
-.cloudRight1 { width: 380px; right: -70px; top: 25%;  opacity: 0.42; }
-.cloudRight2 { width: 280px; right: -30px; bottom: 18%; opacity: 0.28; }
+/* Dark wing: white pill scatter pattern, anchored to the bottom of Hero.
+   It extends upward naturally at full width. z-index 0 keeps it behind content. */
+.darkWing {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+}
 
 /* ── Content wrapper ── */
 .inner {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
