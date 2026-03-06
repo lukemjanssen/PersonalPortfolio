@@ -2,35 +2,35 @@
 .section {
   position: relative;
   background: var(--clr-bg-light);
-  /* Top padding reserves space below the light wing (75.52vw × 0.45 ≈ 34vw) */
-  padding: 34vw 1.5rem 6rem;
+  /* Top padding reserves space below the light wing (727/1067 × 100vw ≈ 68vw) */
+  padding: 68vw 1.5rem 6rem;
   overflow: hidden;
   z-index: 1;
 }
 
 /* ── Light wing ── */
-/* Wrapper: full-width, sits at the top of Projects, not participating in flow */
+/* Wrapper: full-width, sits at the top of Projects, explicit height = SVG aspect ratio */
 .lightWingWrap {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  /* Same aspect ratio as the SVG: 728/964 × 100vw */
-  height: 75.52vw;
+  /* New SVG aspect ratio: 727/1067 × 100vw ≈ 68.13vw */
+  height: 68.13vw;
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
 }
 
-/* The img is flipped 180° and squished vertically to match the dark wing's pill thickness.
-   scale(-1, -1) mirrors both axes; scaleY(0.45) is folded in via the Y component.
-   transform-origin: top keeps the pattern pinned to the section edge. */
+/* scale(-1,-1) with transform-origin:center flips the image around its own midpoint.
+   Because the wrapper height = image natural height, the flipped image's bottom edge
+   sits exactly on the seam and the top edge extends 68vw down into Projects. */
 .lightWingImg {
   display: block;
   width: 100%;
   height: auto;
-  transform: scale(-1, -0.45);
-  transform-origin: top center;
+  transform: scale(-1, -1);
+  transform-origin: center center;
   /* Convert white pills → dark pills matching the dark bg color */
   filter: invert(1) brightness(0.22);
 }

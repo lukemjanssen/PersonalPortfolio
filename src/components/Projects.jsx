@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FiStar, FiGitBranch, FiExternalLink } from 'react-icons/fi';
 import { useGitHubRepos } from '../hooks/useGitHubRepos';
 import styles from './Projects.module.css';
-import VectorSrc from '../assets/Vector.svg';
+import VectorSrc from '../assets/newvector.svg';
 
 const MotionSection = motion.section;
 const MotionDiv     = motion.div;

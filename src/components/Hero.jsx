@@ -1,7 +1,7 @@
 import { motion as Motion } from 'framer-motion';
 import styles from './Hero.module.css';
 // SVG must be uppercase-aliased to satisfy the no-unused-vars eslint rule
-import VectorSrc from '../assets/Vector.svg';
+import VectorSrc from '../assets/newvector.svg';
 
 /* Stagger config for text entrance */
 const container = {

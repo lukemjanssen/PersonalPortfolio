@@ -5,14 +5,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Bottom padding reserves space above the dark wing (75.52vw × 0.45 ≈ 34vw) */
-  padding-bottom: 34vw;
+  /* Bottom padding reserves space above the dark wing (727/1067 × 100vw ≈ 68vw) */
+  padding-bottom: 68vw;
   overflow: hidden;
   z-index: 1;
 }
 
 /* Dark wing: white pill scatter pattern, anchored to the bottom of Hero.
-   scaleY squishes the pills vertically for a finer, cleaner look.
+   Thinning is baked into the SVG — no scaleY needed.
    transform-origin: bottom keeps the pattern pinned to the section edge. */
 .darkWing {
   position: absolute;
@@ -23,8 +23,6 @@
   display: block;
   z-index: 0;
   pointer-events: none;
-  transform: scaleY(0.45);
-  transform-origin: bottom center;
 }
 
 /* ── Content wrapper ── */
