@@ -1,7 +1,7 @@
 .wrapper {
-  /* Bridges the two sections with no gap */
   display: block;
   width: 100%;
+  /* Negative margin pulls sections into the divider so no background gap shows */
   margin-top: -1px;
   margin-bottom: -1px;
   line-height: 0;
@@ -11,6 +11,6 @@
 .svg {
   display: block;
   width: 100%;
-  /* Height in viewport units so it scales proportionally */
-  height: clamp(120px, 14vw, 220px);
+  /* Aspect ratio matches viewBox 1440×500 — preserves the diagonal sweep shape */
+  height: clamp(180px, 22vw, 360px);
 }
