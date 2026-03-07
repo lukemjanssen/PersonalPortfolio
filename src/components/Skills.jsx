@@ -51,16 +51,15 @@ export default function Skills() {
 
   useEffect(() => {
     const onScroll = () => {
-      if (revealedRef.current) return;
       const el = sectionRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      // Only fire after the user has actually scrolled —
-      // rect.top going negative means the section top has passed the viewport top,
-      // i.e. the user is well into the section.
       if (rect.top < window.innerHeight * 0.25) {
         revealedRef.current = true;
         setRevealed(true);
+      } else {
+        revealedRef.current = false;
+        setRevealed(false);
       }
     };
 
@@ -77,7 +76,9 @@ export default function Skills() {
 
       {/* Mirrored wave — same as Projects */}
       <div className={styles.wingWrap} aria-hidden="true">
-        <img src={VectorSrc} className={styles.wingImg} alt="" />
+        <div className={styles.wingMask}>
+          <img src={VectorSrc} className={styles.wingImg} alt="" />
+        </div>
       </div>
 
       {/* ── Heading area — two panels stacked in the same position.

@@ -20,6 +20,27 @@
   clip-path: inset(8px 0 0 0);
 }
 
+/* Separate mask layer — keeps clip-path and mask-image on different
+   elements so they don't conflict in the browser's compositing pipeline. */
+.lightWingMask {
+  position: absolute;
+  inset: 0;
+  mask-image: radial-gradient(
+    ellipse 340% 290% at 8% 0%,
+    black 0%,
+    black 45%,
+    rgba(0,0,0,0.35) 65%,
+    transparent 85%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 340% 290% at 8% 0%,
+    black 0%,
+    black 45%,
+    rgba(0,0,0,0.35) 65%,
+    transparent 85%
+  );
+}
+
 .lightWingImg {
   position: absolute;
   top: 0;           /* thin tip of the SVG stays flush with section top */
@@ -157,7 +178,7 @@
 }
 
 .card:hover .lang {
-  border-color: rgba(181, 173, 215, 0.4);
+  border-color: rgba(157, 145, 204, 0.4);
   color: var(--clr-accent-soft);
 }
 

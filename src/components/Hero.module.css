@@ -23,8 +23,25 @@
   display: block;
   z-index: 3;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 1;
   filter: blur(0.6px);
+  /* Radial fade centred on the bottom-right corner — where the wave
+     staircase is densest and meets the Hero/Skills seam. Mirrors the
+     Skills section's mask which anchors at bottom-left. */
+  mask-image: radial-gradient(
+    ellipse 340% 290% at 92% 0%,
+    black 0%,
+    black 45%,
+    rgba(0,0,0,0.35) 65%,
+    transparent 85%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 340% 290% at 92% 0%,
+    black 0%,
+    black 45%,
+    rgba(0,0,0,0.35) 65%,
+    transparent 85%
+  );
 }
 
 /* ── Centred content column ── */
@@ -92,7 +109,7 @@
 /* ── Tagline ── */
 .tagline {
   font-size: clamp(1rem, 2vw, 1.2rem);
-  color: #d4d0e8;
+  color: #c5bfe6;
   font-weight: 400;
 }
 
@@ -180,8 +197,8 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(181, 173, 215, 0.35);
-  box-shadow: 0 0 40px rgba(181, 173, 215, 0.2);
+  border: 3px solid rgba(157, 145, 204, 0.35);
+  box-shadow: 0 0 40px rgba(157, 145, 204, 0.2);
 }
 
 .imageWrap::after {
@@ -193,6 +210,6 @@
   justify-content: center;
   font-size: 3rem;
   border-radius: 50%;
-  border: 3px dashed rgba(181, 173, 215, 0.3);
+  border: 3px dashed rgba(157, 145, 204, 0.3);
   z-index: -1;
 }

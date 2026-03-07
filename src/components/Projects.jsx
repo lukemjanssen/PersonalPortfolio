@@ -35,7 +35,9 @@ export default function Projects() {
     >
       {/* Light wing: same SVG flipped 180° and darkened — anchored to the top of Projects */}
       <div className={styles.lightWingWrap} aria-hidden="true">
-        <img src={VectorSrc} className={styles.lightWingImg} alt="" />
+        <div className={styles.lightWingMask}>
+          <img src={VectorSrc} className={styles.lightWingImg} alt="" />
+        </div>
       </div>
 
       {/* Section heading — absolutely positioned top-right, diagonal cut on the left */}

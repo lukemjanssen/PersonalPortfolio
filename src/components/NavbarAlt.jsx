@@ -4,6 +4,7 @@ import styles from './NavbarAlt.module.css';
 
 const NAV_LINKS = [
   { label: 'Home',     href: '#hero' },
+  { label: 'Skills',   href: '#skills' },
   { label: 'Projects', href: '#projects' },
   { label: 'Contact',  href: '#contact' },
 ];
@@ -63,15 +64,15 @@ export default function NavbarAlt() {
       >
         {/* Fill — same colour as the nav glass */}
         <polygon
-          points="0,0 100,0 78,100 0,100"
+          points="0,0 100,0 83,100 0,100"
           className={styles.bgFill}
         />
         {/* Top edge */}
         <line x1="0" y1="0" x2="100" y2="0" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
         {/* Bottom edge */}
-        <line x1="0" y1="100" x2="78" y2="100" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+        <line x1="0" y1="100" x2="83" y2="100" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
         {/* Diagonal right edge */}
-        <line x1="100" y1="0" x2="78" y2="100" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+        <line x1="100" y1="0" x2="83" y2="100" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
       </svg>
 
       {/* Nav content */}
