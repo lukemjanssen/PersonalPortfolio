@@ -24,6 +24,8 @@
   display: block;
   z-index: 3;
   pointer-events: none;
+  opacity: 0.55;
+  filter: blur(0.6px);
 }
 
 /* ── Centred content column ── */
@@ -91,7 +93,7 @@
 /* ── Tagline ── */
 .tagline {
   font-size: clamp(1rem, 2vw, 1.2rem);
-  color: #b8bdd4;
+  color: #d4d0e8;
   font-weight: 400;
 }
 
@@ -129,12 +131,12 @@
 }
 
 .ctaFill {
-  fill: rgba(26, 28, 34, 0.92);
+  fill: rgba(19, 21, 19, 0.92);
   transition: fill 0.3s ease;
 }
 
 .cta:hover .ctaFill {
-  fill: rgba(34, 37, 48, 0.98);
+  fill: rgba(32, 35, 32, 0.98);
 }
 
 .ctaEdge {
@@ -179,8 +181,8 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(124, 131, 253, 0.35);
-  box-shadow: 0 0 40px rgba(124, 131, 253, 0.2);
+  border: 3px solid rgba(181, 173, 215, 0.35);
+  box-shadow: 0 0 40px rgba(181, 173, 215, 0.2);
 }
 
 .imageWrap::after {
@@ -192,6 +194,6 @@
   justify-content: center;
   font-size: 3rem;
   border-radius: 50%;
-  border: 3px dashed rgba(124, 131, 253, 0.3);
+  border: 3px dashed rgba(181, 173, 215, 0.3);
   z-index: -1;
 }

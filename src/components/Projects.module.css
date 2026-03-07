@@ -28,6 +28,8 @@
   height: auto;     /* natural aspect ratio — never distorted */
   transform: scale(-1, 1);
   transform-origin: center center;
+  opacity: 0.55;
+  filter: blur(0.6px);
 }
 
 .container {
@@ -72,7 +74,7 @@
 }
 
 .headingFill {
-  fill: rgba(26, 28, 34, 0.92);  /* dark fill — matches hero/navbar */
+  fill: rgba(19, 21, 19, 0.92);  /* dark fill — matches hero/navbar */
 }
 
 .headingEdge {
@@ -155,7 +157,7 @@
 }
 
 .card:hover .lang {
-  border-color: rgba(165, 170, 255, 0.4);
+  border-color: rgba(181, 173, 215, 0.4);
   color: var(--clr-accent-soft);
 }
 

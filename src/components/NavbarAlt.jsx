@@ -18,15 +18,21 @@ export default function NavbarAlt() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  /* Watch the Projects section — switch to opaque dark style whenever the
-     navbar (fixed, ~60px tall) is overlapping the light-background section. */
+  /* Watch the Skills and Projects sections — switch to opaque dark style whenever
+     the navbar (~80px tall) overlaps either light-background section. */
   useEffect(() => {
-    const NAV_HEIGHT = 80; // px — approximate bottom of the navbar
+    const NAV_HEIGHT = 80;
     const check = () => {
-      const target = document.getElementById('projects');
-      if (!target) return;
-      const { top, bottom } = target.getBoundingClientRect();
-      setOnLight(top < NAV_HEIGHT && bottom > 0);
+      const sections = ['skills', 'projects'].map(id => document.getElementById(id));
+      console.log('[NavbarAlt] sections found:', sections.map((el, i) => ({ id: ['skills','projects'][i], found: !!el })));
+      const isOverLight = sections.some(el => {
+        if (!el) return false;
+        const { top, bottom } = el.getBoundingClientRect();
+        console.log('[NavbarAlt]', el.id, { top: top.toFixed(1), bottom: bottom.toFixed(1), NAV_HEIGHT, triggers: top < NAV_HEIGHT && bottom > 0 });
+        return top < NAV_HEIGHT && bottom > 0;
+      });
+      console.log('[NavbarAlt] onLight ->', isOverLight);
+      setOnLight(isOverLight);
     };
     window.addEventListener('scroll', check, { passive: true });
     window.addEventListener('resize', check, { passive: true });
@@ -45,7 +51,8 @@ export default function NavbarAlt() {
      weight/colour as top and bottom — no clip-path involved, nothing gets cut. */
   return (
     <Motion.nav
-      className={[styles.nav, scrolled ? styles.scrolled : '', onLight ? styles.onLight : ''].filter(Boolean).join(' ')}
+      className={[styles.nav, scrolled ? styles.scrolled : ''].filter(Boolean).join(' ')}
+      data-on-light={onLight ? 'true' : undefined}
       initial={{ x: -40, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
