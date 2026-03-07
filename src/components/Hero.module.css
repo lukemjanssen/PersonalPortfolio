@@ -16,8 +16,7 @@
    the right edge of the name, creating the cutout illusion. */
 .darkWing {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   bottom: -6px;
   width: 100%;
   height: auto;

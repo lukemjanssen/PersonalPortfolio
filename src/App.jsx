@@ -3,7 +3,7 @@ import NavbarAlt from './components/NavbarAlt';
 import Hero     from './components/Hero';
 import Skills   from './components/Skills';
 import Projects from './components/Projects';
-import Footer   from './components/Footer';
+import Contact  from './components/Contact';
 
 export default function App() {
   return (
@@ -16,10 +16,12 @@ export default function App() {
         {/* Skills — light section, immediately below hero fold */}
         <Skills />
 
-        {/* GitHub projects — light section with card grid */}
+        {/* GitHub projects — dark section with card grid */}
         <Projects />
+
+        {/* Contact — light section, continues the alternating pattern */}
+        <Contact />
       </main>
-      <Footer />
     </>
   );
 }

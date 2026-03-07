@@ -1,0 +1,283 @@
+/* ── Contact section — light theme, no wave pattern ── */
+.section {
+  position: relative;
+  background: var(--clr-bg-light);
+  min-height: 100vh;
+  padding: 0 0 6rem;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* ── Top divider line — thin dark rule at section boundary ── */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: clamp(1.5rem, 5vw, 3rem);
+  right: clamp(1.5rem, 5vw, 3rem);
+  height: 1px;
+  background: rgba(19, 21, 19, 0.1);
+}
+
+/* ── Two-column content container ── */
+.container {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: clamp(5rem, 10vw, 9rem);
+  padding-left: clamp(1.5rem, 5vw, 3rem);
+  padding-right: clamp(1.5rem, 5vw, 3rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(3rem, 6vw, 8rem);
+  align-items: start;
+}
+
+/* ── Section label row — spans full grid width ── */
+.sectionHeader {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.sectionLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(19, 21, 19, 0.35);
+  white-space: nowrap;
+}
+
+.sectionRule {
+  flex: 1;
+  height: 1px;
+  background: rgba(19, 21, 19, 0.1);
+}
+
+/* ── Left column ── */
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--clr-accent);
+}
+
+.cta {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: #131513;
+}
+
+.blurb {
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  color: rgba(19, 21, 19, 0.55);
+  line-height: 1.7;
+  max-width: 42ch;
+}
+
+/* Email CTA — parallelogram matching Hero CTA style, but light section inverted */
+.emailBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  cursor: pointer;
+  text-decoration: none;
+  height: 44px;
+  align-self: flex-start;
+}
+
+.emailBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(8.3% 0, 100% 0, 91.7% 100%, 0 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.btnBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.btnFill {
+  fill: rgba(19, 21, 19, 0.92);
+  transition: fill var(--transition);
+}
+
+.emailBtn:hover .btnFill {
+  fill: rgba(32, 35, 32, 0.98);
+}
+
+.btnEdge {
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 1;
+  fill: none;
+  transition: stroke var(--transition);
+}
+
+.emailBtn:hover .btnEdge {
+  stroke: var(--clr-accent-soft);
+}
+
+.btnLabel {
+  position: relative;
+  z-index: 1;
+  padding: 0.8rem 3.5rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--clr-accent-soft);
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+
+.emailBtn:hover .btnLabel {
+  color: #fff;
+}
+
+/* ── Right column ── */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 1rem;
+}
+
+.linksLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(19, 21, 19, 0.35);
+  margin-bottom: 1.25rem;
+}
+
+/* Social link row — angular, line-driven, like skills pills */
+.socialRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(19, 21, 19, 0.1);
+  color: #131513;
+  text-decoration: none;
+  transition: color var(--transition), border-color var(--transition);
+  position: relative;
+}
+
+.socialRow:first-of-type {
+  border-top: 1px solid rgba(19, 21, 19, 0.1);
+}
+
+.socialRow:hover {
+  color: var(--clr-accent);
+  border-color: rgba(19, 21, 19, 0.2);
+}
+
+.socialIcon {
+  font-size: 1.15rem;
+  color: var(--clr-accent-soft);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.socialLabel {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.socialArrow {
+  font-size: 1rem;
+  color: rgba(19, 21, 19, 0.25);
+  transition: color var(--transition), transform var(--transition);
+}
+
+.socialRow:hover .socialArrow {
+  color: var(--clr-accent);
+  transform: translate(3px, -3px);
+}
+
+/* Availability chip */
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(19, 21, 19, 0.5);
+  text-transform: uppercase;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4caf7d;
+  box-shadow: 0 0 0 3px rgba(76, 175, 125, 0.2);
+  animation: pulse 2.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(76, 175, 125, 0.2); }
+  50%       { box-shadow: 0 0 0 6px rgba(76, 175, 125, 0.08); }
+}
+
+/* ── Footer line ── */
+.footerLine {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 4rem auto 0;
+  padding: 1.5rem clamp(1.5rem, 5vw, 3rem) 0;
+  border-top: 1px solid rgba(19, 21, 19, 0.1);
+}
+
+.copy {
+  font-size: 0.82rem;
+  color: rgba(19, 21, 19, 0.35);
+  letter-spacing: 0.02em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .heading {
+    top: 6rem;
+  }
+
+  .cta {
+    font-size: clamp(2.4rem, 10vw, 3.5rem);
+  }
+}

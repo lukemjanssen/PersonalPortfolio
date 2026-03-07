@@ -92,7 +92,9 @@ function WaveName({ word, rowOffset = 0, marginRight = 0, forwardRef = null }) {
 }
 
 export default function Hero() {
+  const heroRef  = useRef(null);
   const waveRef  = useRef(null);
+
 //   const greetRef = useRef(null);
   const lukRef   = useRef(null);
   const janRef   = useRef(null);
@@ -144,8 +146,10 @@ export default function Hero() {
     return () => ro.disconnect();
   }, [recalc]);
 
+  /* Recalc runs after wave loads and on resize — no parallax */
+
   return (
-    <section id="hero" className={styles.hero}>
+    <section id="hero" ref={heroRef} className={styles.hero}>
 
       <img
         ref={waveRef}
@@ -218,6 +222,7 @@ export default function Hero() {
 
         </Motion.div>
       </div>
+
     </section>
   );
 }

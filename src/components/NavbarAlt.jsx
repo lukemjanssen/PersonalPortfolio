@@ -23,15 +23,12 @@ export default function NavbarAlt() {
   useEffect(() => {
     const NAV_HEIGHT = 80;
     const check = () => {
-      const sections = ['skills', 'projects'].map(id => document.getElementById(id));
-      console.log('[NavbarAlt] sections found:', sections.map((el, i) => ({ id: ['skills','projects'][i], found: !!el })));
+      const sections = ['skills', 'projects', 'contact'].map(id => document.getElementById(id));
       const isOverLight = sections.some(el => {
         if (!el) return false;
         const { top, bottom } = el.getBoundingClientRect();
-        console.log('[NavbarAlt]', el.id, { top: top.toFixed(1), bottom: bottom.toFixed(1), NAV_HEIGHT, triggers: top < NAV_HEIGHT && bottom > 0 });
         return top < NAV_HEIGHT && bottom > 0;
       });
-      console.log('[NavbarAlt] onLight ->', isOverLight);
       setOnLight(isOverLight);
     };
     window.addEventListener('scroll', check, { passive: true });

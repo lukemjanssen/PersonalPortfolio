@@ -84,6 +84,30 @@
   padding: 1.1rem 2.5rem 1.1rem 5rem;
 }
 
+/* ── Scroll cue inner layout (Panel A only) ── */
+.scrollCueInner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.scrollArrow {
+  display: flex;
+  align-items: center;
+  color: rgba(19, 21, 19, 0.45);
+  animation: scrollBounce 1.6s ease-in-out infinite;
+}
+
+.scrollArrow svg {
+  width: 14px;
+  height: 20px;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(4px); }
+}
+
 .title {
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 800;
