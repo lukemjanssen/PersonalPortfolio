@@ -95,7 +95,6 @@ export default function Hero() {
   const heroRef  = useRef(null);
   const waveRef  = useRef(null);
 
-//   const greetRef = useRef(null);
   const lukRef   = useRef(null);
   const janRef   = useRef(null);
   const tagRef   = useRef(null);
@@ -146,8 +145,6 @@ export default function Hero() {
     return () => ro.disconnect();
   }, [recalc]);
 
-  /* Recalc runs after wave loads and on resize — no parallax */
-
   return (
     <section id="hero" ref={heroRef} className={styles.hero}>
 
@@ -169,20 +166,10 @@ export default function Hero() {
           style={{ opacity: mr ? undefined : 0 }}
         >
 
-          {/* <Motion.p
-            ref={greetRef}
-            className={styles.greeting}
-            style={{ marginRight: mr.greet }}
-            variants={item}
-          >
-            Hi, I&apos;m
-          </Motion.p> */}
-
-          {/* Name rows are direct children of .text so margin-left:auto applies
-              identically to greeting/tagline/CTA. marginRight from JS pins the
-              right edge to the wave boundary at each row's vertical midpoint.  */}
-          <WaveName word="LUKE"    rowOffset={0} marginRight={mr?.luk ?? 0} forwardRef={lukRef} />
-          <WaveName word="JANSSEN" rowOffset={4} marginRight={mr?.jan ?? 0} forwardRef={janRef} />
+          {/* Name rows — marginRight from JS pins each row's right edge
+              to the wave boundary at that row's vertical midpoint. */}
+          <WaveName word="Luke"    rowOffset={0} marginRight={mr?.luk ?? 0} forwardRef={lukRef} />
+          <WaveName word="Janssen" rowOffset={4} marginRight={mr?.jan ?? 0} forwardRef={janRef} />
 
           <Motion.p
             ref={tagRef}

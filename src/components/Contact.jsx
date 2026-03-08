@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { motion as Motion } from 'framer-motion';
 import { FiGithub, FiMail, FiLinkedin, FiArrowUpRight } from 'react-icons/fi';
 import styles from './Contact.module.css';
@@ -8,9 +7,9 @@ const MotionDiv     = Motion.div;
 const MotionA       = Motion.a;
 
 const SOCIALS = [
-  { icon: FiGithub,   label: 'GitHub',   href: 'https://github.com/your-github-username' },
-  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/your-handle' },
-  { icon: FiMail,     label: 'Email',    href: 'mailto:you@example.com' },
+  { icon: FiGithub,   label: 'GitHub',   href: 'https://github.com/lukemjanssen' },
+  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/luke-m-janssen' },
+  { icon: FiMail,     label: 'Email',    href: 'mailto:lj@morrisdesign.net' },
 ];
 
 /* Stagger container for the right column items */
@@ -34,12 +33,9 @@ const leftItem = {
 };
 
 export default function Contact() {
-  const sectionRef = useRef(null);
-
   return (
     <MotionSection
       id="contact"
-      ref={sectionRef}
       className={styles.section}
     >
       {/* Main content — two columns */}
@@ -81,7 +77,7 @@ export default function Contact() {
 
           {/* Primary email CTA — parallelogram matching Hero style */}
           <Motion.a
-            href="mailto:you@example.com"
+            href="mailto:lj@morrisdesign.net"
             className={styles.emailBtn}
             variants={leftItem}
             whileHover={{}}
@@ -99,7 +95,7 @@ export default function Contact() {
               <line x1="0"    y1="0"  x2="100"  y2="44" className={styles.btnEdge} vectorEffect="non-scaling-stroke" />
               <line x1="1100" y1="0"  x2="1200" y2="44" className={styles.btnEdge} vectorEffect="non-scaling-stroke" />
             </svg>
-            <span className={styles.btnLabel}>you@example.com</span>
+            <span className={styles.btnLabel}>lj@morrisdesign.net</span>
           </Motion.a>
         </MotionDiv>
 

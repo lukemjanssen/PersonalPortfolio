@@ -1,24 +1,29 @@
 /* ── Skills section ── */
-/* Height = SVG natural aspect ratio (727/1067 = 68.13vw).
-   This must be the one source of truth — no min/max-height that
-   would break the wave-to-wave continuity at any screen width.
-   Content is position:absolute so it never stretches this box. */
+/* height:auto lets content drive section height at all sizes.
+   The top wave (position:absolute top:0) always pins to the Hero seam.
+   The bottom wave (position:absolute bottom:0) always pins to the Projects seam.
+   padding-top clears the top wave's dense region; padding-bottom reserves
+   room for the bottom wave so content never overlaps it. */
 .section {
   position: relative;
   background: var(--clr-bg-light);
-  height: 68.13vw;
+  height: auto;
   overflow: hidden;
+  padding-top: calc(8rem + 70px + 3rem); /* banner top + banner height + gap to list */
+  padding-bottom: calc(68.13vw + 3rem);  /* reserve room for the bottom wave */
   z-index: 1;
 }
 
-/* ── Wave — bottom-anchored so thin end sits at section bottom ── */
-/* scale(-1,-1) = 180° flip: original thin-top becomes thin-bottom visually.
-   bottom:0 pins the element's bottom to the section bottom.
-   At any viewport width the SVG renders at exactly 68.13vw tall = section height.
-   overflow:hidden on .section clips any sub-pixel rounding. */
+/* ── Top wave — anchored to section top ── */
+/* scale(-1,-1) = 180° flip. The SVG's natural thin-end-at-top becomes
+   dense-end-at-top after the flip — connecting to Hero's dark dense bottom.
+   top:0 pins it there so as the section grows on mobile the wave never moves. */
 .wingWrap {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 68.13vw;  /* always exactly one wave tall, regardless of section height */
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
@@ -50,26 +55,88 @@
 
 .wingImg {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   height: auto;
   transform: scale(-1, -1);
   transform-origin: center center;
-  filter: invert(1) brightness(0.18) blur(0.6px);
-  opacity: 0.7;
+  filter: invert(1) brightness(0.1) blur(0.6px);
+  opacity: 0.9;
 }
 
-/* ── Heading banner — same light-inverted style as Projects ── */
+/* ── Bottom wave — mobile only, hidden on desktop ── */
+/* The Skills→Projects seam should be identical to the Hero→Skills seam.
+   Hero→Skills: Hero wave is natural orientation (dense bottom-right),
+   Skills top wave is scale(-1,-1) (dense top-left). They meet corner-to-corner.
+   Skills→Projects: Skills bottom wave = same as Hero wave = natural orientation,
+   dark filter, bottom-anchored, dense end at bottom-right.
+   Projects top wave will be updated to scale(-1,-1) to match Skills top,
+   so its dense end is at top-left — meeting Skills' dense bottom-right. */
+.wingWrapBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 68.13vw;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wingMaskBottom {
+  position: absolute;
+  inset: 0;
+  /* Mask fades the wave out toward the top (into the white space above)
+     and is fully opaque at the bottom where it meets Projects.
+     Anchor 92% 0% = top-right corner — mirrors Hero's mask which anchors
+     at 92% 0% on the dark section, fading toward top-right. */
+  mask-image: radial-gradient(
+    ellipse 340% 290% at 92% 0%,
+    black 0%,
+    black 45%,
+    rgba(0,0,0,0.35) 65%,
+    transparent 85%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 340% 290% at 92% 0%,
+    black 0%,
+    black 45%,
+    rgba(0,0,0,0.35) 65%,
+    transparent 85%
+  );
+}
+
+.wingImgBottom {
+  position: absolute;
+  bottom: -6px;  /* same bleed as Hero wave */
+  left: 0;
+  width: 100%;
+  height: auto;
+  /* No transform — natural SVG orientation, same as Hero wave.
+     Dense end is at bottom-right, matching Hero's dense bottom. */
+  transform-origin: center center;
+  filter: invert(1) brightness(0.1) blur(0.6px);
+  opacity: 0.9;
+}
+
+/* ── Heading banner ── */
 .heading {
   position: absolute;
-  top: 8rem;
+  top: 8rem;  /* desktop: near the top of the section, visible on load, balances Hero text */
   right: 0;
   z-index: 3;
   display: inline-flex;
   align-items: stretch;
 }
 
+@media (max-width: 860px) {
+  .heading { top: 6rem; }
+}
+
+@media (max-width: 640px) {
+  .heading { top: calc(68.13vw * 0.3); } /* mobile: clear the dense wave region */
+}
 .heading::before {
   content: '';
   position: absolute;
@@ -94,43 +161,83 @@
 }
 
 .headingEdge {
-  stroke: rgba(19, 21, 19, 0.15);
-  stroke-width: 1;
+  stroke: rgba(19, 21, 19, 0.3);
+  stroke-width: 1.5;
   fill: none;
 }
 
 .headingContent {
   position: relative;
   z-index: 1;
-  padding: 1.1rem 2.5rem 1.1rem 5rem;
+  padding: 1.1rem 2.5rem 1.1rem 7rem; /* extra left padding — away from the angled edge */
 }
 
-/* ── Scroll cue inner layout (Panel A only) ── */
-.scrollCueInner {
+/* Invisible ghost that drives the banner's width in normal flow.
+   It mirrors the active panel's text so the banner naturally sizes
+   to it; visibility:hidden keeps it out of view but still in layout.
+   Framer Motion layout-animates the width change on .heading
+   for a smooth parallelogram expansion/contraction. */
+.headingGhost {
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Both real panels stack on top of the ghost using absolute positioning.
+   They never affect layout — only the ghost does. */
+.headingTextSlot {
+  position: absolute;
+  inset: 0;
+  padding: 1.1rem 2.5rem 1.1rem 7rem; /* must match headingContent padding */
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .headingContent,
+  .headingTextSlot {
+    padding: 0.85rem 1.75rem 0.85rem 5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .headingContent,
+  .headingTextSlot {
+    padding: 0.7rem 1.25rem 0.7rem 3.5rem;
+  }
+}
+
+/* ── Scroll arrow — anchored to the bottom of .heading itself ── */
+.scrollArrowWrap {
+  /* Sits just below the banner, centred across its full width */
+  position: absolute;
+  bottom: -5rem; /* gap below the banner edge */
+  left: 0;
+  right: 0;
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
 }
 
 .scrollArrow {
   display: flex;
   align-items: center;
-  color: rgba(19, 21, 19, 0.45);
+  color: var(--clr-accent);
   animation: scrollBounce 1.6s ease-in-out infinite;
 }
 
 .scrollArrow svg {
-  width: 14px;
-  height: 20px;
+  width: 16px;
+  height: 44px;
 }
 
 @keyframes scrollBounce {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(4px); }
+  50%       { transform: translateY(6px); }
 }
 
 .title {
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.1rem, 3vw, 2rem);
   font-weight: 800;
   color: #131513;
   letter-spacing: -0.03em;
@@ -139,30 +246,30 @@
 
 .sub {
   margin-top: 0.25rem;
-  font-size: 0.875rem;
+  font-size: clamp(0.72rem, 1.4vw, 0.875rem);
   color: rgba(19, 21, 19, 0.5);
   font-weight: 400;
   letter-spacing: 0.01em;
 }
 
-/* ── Content container — absolutely right-aligned, vertically centered ── */
+/* ── Content container — normal flow, right-aligned ── */
+/* position:relative (not absolute) so the section's height:auto wraps it.
+   The section's padding-top already cleared the top wave, so no extra
+   top offset needed here. Right-align to sit in the wave's open white space. */
 .container {
-  position: absolute;
-  /* Push down past banner, then center remaining space vertically */
-  top: calc(8rem + 70px + 4rem);
-  right: 0;
+  position: relative;
+  margin-left: auto;   /* push to the right */
   z-index: 2;
   width: 46vw;
   max-width: 720px;
   padding-right: clamp(1rem, 3vw, 2.5rem);
   padding-left: clamp(1rem, 3vw, 2.5rem);
+  padding-bottom: 2rem;
   display: grid;
-  /* Two equal columns, no divider column */
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
   align-items: flex-start;
   column-gap: 3rem;
-  /* Enables cqi units on children — font scales with container width */
   container-type: inline-size;
 }
 
@@ -176,7 +283,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding-right: 0.75rem; /* space for angled tick on the right */
+  padding-right: 0.75rem;
   padding-left: 0;
   min-width: 0;
   text-align: right;
@@ -187,7 +294,6 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -213,13 +319,12 @@
   line-height: 1;
 }
 
-/* ── Skill rows — angular, line-driven, in theme with the banners ── */
+/* ── Skill rows ── */
 .pills {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap-reverse;
   column-gap: 0.75rem;
- /* prevent overflow on very tall screens, still allows wrapping on narrower screens */
 }
 
 .pill {
@@ -231,7 +336,7 @@
   transition: opacity 0.2s ease;
 }
 
-/* Angled accent tick — right side to match right-aligned text */
+/* Angled accent tick */
 .pill::before {
   content: '';
   position: absolute;
@@ -266,57 +371,164 @@
   line-height: 1.3;
 }
 
-/* ── Tablet: shrink width proportionally ── */
+/* ── Bio block ── */
+/* Desktop: absolutely positioned in the bottom-left of the section —
+   the area the wave's diagonal staircase naturally leaves open.
+   Lays out as a flex row: text on the left, angular photo on the right. */
+.bio {
+  position: absolute;
+  bottom: calc(68.13vw * 0.5);
+  transform: translateY(50%);
+  left: clamp(3rem, 10vw, 10rem);
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: clamp(1.5rem, 3vw, 3rem);
+
+}
+
+/* Text sub-block */
+.bioText_block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-width: 30rem;
+  justify-content: space-between;
+}
+
+.bioName {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: 800;
+  color: #131513;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.bioRole {
+  font-size: clamp(0.75rem, 1.3vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--clr-accent);
+  margin: 0;
+}
+
+.bioText {
+  margin: 0.5rem 0 0;
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  color: rgba(19, 21, 19, 0.65);
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.bioMeta {
+  margin: 0.25rem 0 0;
+  font-size: clamp(0.78rem, 1vw, 0.9rem);
+  color: rgba(19, 21, 19, 0.35);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* Angular photo — parallelogram clip matching the site's slanted geometry. */
+.bioPhoto {
+  flex-shrink: 0;
+  align-self: stretch;   /* fill the full row height set by the text block */
+  width: clamp(200px, 22vw, 320px);
+  /* height:100% on a flex child only resolves when the child has a definite
+     height. Setting height:100% here ensures the img inside can fill it. */
+  height: 100%;
+  clip-path: polygon(
+    38% 0%,
+    100% 0%,
+    62% 100%,
+    0% 100%
+  );
+  overflow: hidden;
+  position: relative;
+}
+
+.bioPhotoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  filter: contrast(1.05) saturate(0.85);
+}
+
+/* ── Tablet: compress width ── */
 @media (max-width: 860px) {
   .container {
     width: 72vw;
     gap: 0.75rem;
+    column-gap: 1.5rem;
     padding-right: clamp(0.5rem, 2vw, 1.5rem);
     padding-left: clamp(0.5rem, 2vw, 1.5rem);
   }
+  .column { gap: 0.4rem; }
+  .columnTitle { font-size: clamp(0.55rem, 1.5vw, 0.7rem); }
 
-  .column {
-    gap: 0.4rem;
+  .bio {
+    left: clamp(1.5rem, 4vw, 3rem);
+    gap: 1.5rem;
   }
-
-  .columnTitle {
-    font-size: clamp(0.55rem, 1.5vw, 0.7rem);
+  .bioText_block {
+    max-width: 24rem;
+  }
+  .bioPhoto {
+    width: clamp(120px, 13vw, 180px);
   }
 }
 
-/* ── Narrow tablet: keep two columns but compress further ── */
+/* ── Mobile: tighten spacing, single-column pills ── */
 @media (max-width: 640px) {
+  .section {
+    padding-top: calc(68.13vw * 0.7);
+    padding-bottom: calc(68.13vw + 2rem);
+  }
+
   .container {
-    width: 88vw;
-    gap: 0.5rem;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
+    width: 90vw;
+    max-width: none;
+    margin: 0 auto;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    column-gap: 1.5rem;
+    padding: 0 1rem 2rem;
   }
 
-  .pill {
-    padding: 0.3rem 0;
-  }
-}
-
-/* ── Mobile: single column, still right-aligned and wave-height clipped ── */
-@media (max-width: 480px) {
-  .container {
-    width: 88vw;
-    grid-template-columns: 1fr;
-    top: calc(6rem + 70px + 1.5rem);
-    gap: 0.4rem;
-  }
-
-  .heading {
-    top: 6rem;
+  /* Bio moves into normal flow on mobile — sits below the skills grid,
+     above the bottom wave's reserved padding. */
+  .bio {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    width: 90vw;
+    max-width: none;
+    margin: 2.5rem auto 0;
+    padding: 0 1rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
   }
 
-  /* Remove tick on single-column — no space for it at left edge */
-  .pill::before {
-    display: none;
+  .bioText_block {
+    max-width: none;
+    flex: 1;
   }
 
-  .column {
-    padding-right: 0;
+  .bioPhoto {
+    width: clamp(72px, 18vw, 100px);
+    flex-shrink: 0;
   }
+
+  .column { gap: 0.4rem; padding-right: 0.5rem; }
+  .pill { padding: 0.25rem 0; }
+  .pill::before { display: none; }
+  .pillName   { font-size: clamp(0.75rem, 3vw, 0.95rem); }
+  .pillDetail { font-size: clamp(0.65rem, 2.5vw, 0.78rem); }
 }

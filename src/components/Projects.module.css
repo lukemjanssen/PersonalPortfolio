@@ -15,9 +15,9 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  /* clip a sliver from the top to hide the sparse trailing pill row
-     that sits right on the Skills/Projects seam */
-  clip-path: inset(8px 0 0 0);
+  /* With scale(-1,-1), the SVG's sparse trailing row is at the bottom of the
+     element (y-flipped), so clip from the bottom to hide it at the seam. */
+  clip-path: inset(0 0 8px 0);
 }
 
 /* Separate mask layer — keeps clip-path and mask-image on different
@@ -47,7 +47,7 @@
   left: 0;
   width: 100%;
   height: auto;     /* natural aspect ratio — never distorted */
-  transform: scale(-1, 1);
+  transform: scale(-1, -1);
   transform-origin: center center;
   opacity: 0.55;
   filter: blur(0.6px);
@@ -63,6 +63,19 @@
   padding-right: clamp(1.5rem, 5vw, 3rem);
 }
 
+@media (max-width: 700px) {
+  /* Wave is shorter than the section at this width — close the gap */
+  .container {
+    padding-top: calc(68.13vw + 1.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-top: calc(68.13vw + 1rem);
+  }
+}
+
 /* Section heading — absolutely positioned, right-aligned, sits just below wave */
 .heading {
   position: absolute;
@@ -71,6 +84,14 @@
   z-index: 3;
   display: inline-flex;
   align-items: stretch;
+}
+
+@media (max-width: 860px) {
+  .heading { top: 6rem; }
+}
+
+@media (max-width: 480px) {
+  .heading { top: 5rem; }
 }
 
 /* Frosted-glass blur clipped to the left-cut polygon */
@@ -99,8 +120,8 @@
 }
 
 .headingEdge {
-  stroke: rgba(255, 255, 255, 0.12);  /* subtle light border */
-  stroke-width: 1;
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 1.5;
   fill: none;
 }
 
@@ -111,8 +132,16 @@
   padding: 1.1rem 2.5rem 1.1rem 5rem;
 }
 
+@media (max-width: 860px) {
+  .headingContent { padding: 0.85rem 1.75rem 0.85rem 3.5rem; }
+}
+
+@media (max-width: 480px) {
+  .headingContent { padding: 0.7rem 1.25rem 0.7rem 2.5rem; }
+}
+
 .title {
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.1rem, 3vw, 2rem);
   font-weight: 800;
   color: rgba(232, 233, 243, 0.95);   /* light text on dark banner */
   letter-spacing: -0.03em;
