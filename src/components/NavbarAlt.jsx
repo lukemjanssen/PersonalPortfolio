@@ -105,11 +105,14 @@ export default function NavbarAlt() {
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
-      <svg className={styles.bg} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="0,0 100,0 83,100 0,100" className={styles.bgFill} />
-        <line x1="0" y1="0" x2="100" y2="0" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
-        <line x1="0" y1="100" x2="83" y2="100" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
-        <line x1="100" y1="0" x2="83" y2="100" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+      {/* Simple SVG polygon — same approach as every other banner.
+          viewBox "0 0 800 56" approximates the nav's rendered pixel ratio.
+          Endpoint 660,56 gives a shallow diagonal visually close to the CTA. */}
+      <svg className={styles.bg} viewBox="0 0 800 56" preserveAspectRatio="none" aria-hidden="true">
+        <polygon points="0,0 800,0 660,56 0,56" className={styles.bgFill} />
+        <line x1="0"   y1="0"  x2="800" y2="0"  className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+        <line x1="0"   y1="56" x2="660" y2="56" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+        <line x1="800" y1="0"  x2="660" y2="56" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
       </svg>
 
       <span className={styles.logo}>LJ</span>

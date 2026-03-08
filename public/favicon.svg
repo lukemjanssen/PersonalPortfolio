@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- Dark background parallelogram matching site geometry -->
-  <polygon points="4,0 32,0 28,32 0,32" fill="#131513"/>
+  <polygon points="4,0 32,0 28,32 0,32" fill="#0d0e0d"/>
   <!-- Accent underline -->
-  <polygon points="4,0 32,0 28,32 0,32" fill="#6a5bae" opacity="0.18"/>
+  <polygon points="4,0 32,0 28,32 0,32" fill="#7b6fd4" opacity="0.18"/>
   <!-- LJ text -->
   <text
     x="16" y="22"

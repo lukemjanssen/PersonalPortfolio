@@ -1,11 +1,6 @@
 /*
- * NavbarAlt — top-left, diagonal right edge mirroring the wave pattern.
- * Shape + borders are drawn by an inline SVG so clip-path never truncates lines.
- *
- * Glass layering (dark mode, default):
- *   1. ::before  — backdrop-filter blur+saturate clipped to the polygon
- *   2. SVG fill  — semi-transparent dark tint with noise grain filter
- *   3. ::after   — inner highlight line at top edge (specular shimmer)
+ * NavbarAlt — top-left parallelogram, diagonal right edge.
+ * Shape is drawn by an inline SVG polygon; ::before clips the backdrop blur.
  */
 
 .nav {
@@ -16,7 +11,7 @@
   display: flex;
   align-items: center;
   gap: 2.5rem;
-  padding: 1rem 6.5rem 1rem 2rem;
+  padding: 1rem 9rem 1rem 2rem;
   transition: opacity var(--transition);
 }
 
@@ -25,7 +20,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  clip-path: polygon(0 0, 100% 0, 83% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 82.5% 100%, 0 100%);
   backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
   -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
   z-index: 0;
@@ -40,7 +35,6 @@
   left: 0;
   right: 0;
   height: 1px;
-  /* Fades out before the diagonal edge */
   background: linear-gradient(
     90deg,
     rgba(255,255,255,0.0)  0%,
@@ -63,15 +57,24 @@
   z-index: 0;
 }
 
-/* Dark glass fill — cool-dark tint with a faint grain filter */
 .bgFill {
-  fill: rgba(22, 24, 28, 0.55);
+  fill: rgba(16, 17, 16, 0.55);
   transition: fill 0.3s ease;
 }
 
-/* Slightly denser once user has scrolled (more contrast against content) */
 .scrolled .bgFill {
-  fill: rgba(14, 16, 20, 0.78);
+  fill: rgba(10, 11, 10, 0.78);
+}
+
+.bgEdge {
+  stroke: rgba(255, 255, 255, 0.48);
+  stroke-width: 1.5;
+  fill: none;
+  transition: stroke 0.3s ease;
+}
+
+.scrolled .bgEdge {
+  stroke: rgba(255, 255, 255, 0.62);
 }
 
 /* ── Light section (data-on-light) — flip to frosted white glass ── */
@@ -95,7 +98,7 @@
 }
 
 .nav[data-on-light] .bgEdge {
-  stroke: rgba(19, 21, 19, 0.2);
+  stroke: rgba(13, 14, 13, 0.38);
 }
 
 .nav[data-on-light] .logo {
@@ -103,24 +106,12 @@
 }
 
 .nav[data-on-light] .link {
-  color: rgba(19, 21, 19, 0.65);
+  color: rgba(13, 14, 13, 0.65);
 }
 
 .nav[data-on-light] .link:hover,
 .nav[data-on-light] .linkActive {
-  color: rgba(19, 21, 19, 0.95);
-}
-
-/* Border edges — subtle hairlines on all three visible sides */
-.bgEdge {
-  stroke: rgba(255, 255, 255, 0.22);
-  stroke-width: 1;
-  fill: none;
-  transition: stroke 0.3s ease;
-}
-
-.scrolled .bgEdge {
-  stroke: rgba(255, 255, 255, 0.34);
+  color: rgba(13, 14, 13, 0.95);
 }
 
 /* ── Content sits above all layers ── */
@@ -181,16 +172,19 @@
 
 .bracketEdge {
   stroke: var(--clr-accent);
-  stroke-width: 1.2;
+  stroke-width: 1.8;
   fill: none;
-  opacity: 0.85;
+  opacity: 1;
 }
 
 /* ── Mobile — compress nav to fit smaller screens ── */
 @media (max-width: 600px) {
   .nav {
     gap: 1rem;
-    padding: 0.7rem 3.5rem 0.7rem 1.2rem;
+    padding: 0.7rem 4rem 0.7rem 1.2rem;
+    /* Minimum width ensures the 82.5% diagonal endpoint is far enough right
+       to keep the angle shallow, matching the CTA banner diagonal. */
+    min-width: min(55vw, 260px);
   }
 
   /* Hide desktop links on mobile */
@@ -206,7 +200,8 @@
 
 @media (max-width: 400px) {
   .nav {
-    padding: 0.6rem 3rem 0.6rem 1rem;
+    padding: 0.6rem 3.5rem 0.6rem 1rem;
+    min-width: min(60vw, 220px);
   }
 }
 
@@ -251,7 +246,7 @@
   gap: 0;
   min-width: 160px;
   /* Same glass treatment as the nav itself */
-  background: rgba(14, 16, 20, 0.82);
+  background: rgba(10, 11, 10, 0.82);
   backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
   -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
   border: 1px solid rgba(255, 255, 255, 0.12);

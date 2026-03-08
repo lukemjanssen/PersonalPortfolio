@@ -1,16 +1,16 @@
 /* ── Global Design Tokens ── */
 :root {
-  /* Dark palette — Onyx */
-  --clr-bg-dark:   #131513;
-  --clr-bg-dark-2: #1a1d1a;
-  /* Accent — Wisteria */
-  --clr-accent:      #6a5bae;
-  --clr-accent-soft: #9d91cc;
+  /* Dark palette — rich near-black with a very slight warm-neutral undertone */
+  --clr-bg-dark:   #0d0e0d;
+  --clr-bg-dark-2: #141614;
+  /* Accent — vivid periwinkle/purple */
+  --clr-accent:      #7b6fd4;
+  --clr-accent-soft: #b0a6e8;
 
   /* Light palette — White Smoke */
   --clr-bg-light:   #f5f5f5;
   --clr-bg-light-2: #ffffff;
-  --clr-text-light-section: #131513;
+  --clr-text-light-section: #0d0e0d;
 
   /* Text */
   --clr-text-primary: #f5f5f5;

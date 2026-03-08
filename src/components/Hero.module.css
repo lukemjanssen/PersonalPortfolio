@@ -108,7 +108,7 @@
 /* ── Tagline ── */
 .tagline {
   font-size: clamp(1rem, 2vw, 1.2rem);
-  color: #c5bfe6;
+  color: #cec8f0;
   font-weight: 400;
 }
 
@@ -146,17 +146,17 @@
 }
 
 .ctaFill {
-  fill: rgba(19, 21, 19, 0.92);
+  fill: rgba(13, 14, 13, 0.92);
   transition: fill 0.3s ease;
 }
 
 .cta:hover .ctaFill {
-  fill: rgba(32, 35, 32, 0.98);
+  fill: rgba(22, 24, 22, 0.98);
 }
 
 .ctaEdge {
-  stroke: rgba(255, 255, 255, 0.38);
-  stroke-width: 1;
+  stroke: rgba(255, 255, 255, 0.52);
+  stroke-width: 1.5;
   fill: none;
 }
 
