@@ -137,6 +137,10 @@ export default function Skills() {
           Panel B: "Skills & Tools"   — hidden on load, fades in when section enters view.
           Both share .heading (position:absolute top:8rem right:0). ── */}
 
+      {/* Positioning shell — top:25vh centres the banner in the light zone below the hero.
+          Separated from the Framer Motion element so layout animation doesn't
+          clobber the CSS translateY(-50%) centering transform. */}
+      <div className={styles.headingShell}>
       {/* Single banner — slides in from the right on mount, then layout-animates width.
           initial x:60 + opacity:0 → the "pop out from the right" entrance. */}
       <MotionDiv
@@ -213,6 +217,7 @@ export default function Skills() {
           </span>
         </MotionDiv>
       </MotionDiv>
+      </div>{/* end headingShell */}
 
       <div className={styles.container}>
 

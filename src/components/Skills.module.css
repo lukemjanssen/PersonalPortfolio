@@ -121,21 +121,20 @@
 }
 
 /* ── Heading banner ── */
-.heading {
+/* Shell handles positioning — separated so Framer Motion's layout animation
+   on the inner .heading element doesn't clobber the CSS translateY centering. */
+.headingShell {
   position: absolute;
-  top: 8rem;  /* desktop: near the top of the section, visible on load, balances Hero text */
+  top: 25vh;          /* midpoint of the light zone (50vh hero + 25vh = 75vh from top) */
+  transform: translateY(-50%); /* true vertical centre of the banner */
   right: 0;
   z-index: 3;
+}
+
+/* Inner banner — display only, no positioning */
+.heading {
   display: inline-flex;
   align-items: stretch;
-}
-
-@media (max-width: 860px) {
-  .heading { top: 6rem; }
-}
-
-@media (max-width: 640px) {
-  .heading { top: calc(68.13vw * 0.3); } /* mobile: clear the dense wave region */
 }
 .heading::before {
   content: '';
@@ -511,19 +510,24 @@
     max-width: none;
     margin: 2.5rem auto 0;
     padding: 0 1rem;
-    flex-direction: row;
+    flex-direction: column;   /* stack vertically */
     align-items: center;
     gap: 1.25rem;
   }
 
   .bioText_block {
     max-width: none;
-    flex: 1;
+    width: 100%;
+    flex: unset;
+    text-align: left;
   }
 
+  /* Photo above text, full width with natural portrait aspect ratio */
   .bioPhoto {
-    width: clamp(72px, 18vw, 100px);
-    flex-shrink: 0;
+    order: -1;              /* moves photo above the text block */
+    width: 100%;
+    height: clamp(220px, 55vw, 340px);
+    align-self: stretch;
   }
 
   .column { gap: 0.4rem; padding-right: 0.5rem; }
