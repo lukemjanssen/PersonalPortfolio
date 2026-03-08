@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark background parallelogram matching site geometry -->
+  <polygon points="4,0 32,0 28,32 0,32" fill="#131513"/>
+  <!-- Accent underline -->
+  <polygon points="4,0 32,0 28,32 0,32" fill="#6a5bae" opacity="0.18"/>
+  <!-- LJ text -->
+  <text
+    x="16" y="22"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="15"
+    fill="#c5bfe6"
+    text-anchor="middle"
+    letter-spacing="-0.5"
+  >LJ</text>
+</svg>
