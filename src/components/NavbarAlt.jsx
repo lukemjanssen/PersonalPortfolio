@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion as Motion } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import styles from './NavbarAlt.module.css';
 
 const NAV_LINKS = [
@@ -14,6 +14,7 @@ export default function NavbarAlt() {
   const [scrolled, setScrolled]   = useState(false);
   const [onLight, setOnLight]     = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [menuOpen, setMenuOpen]   = useState(false);
 
   const linkRefs = useRef([]);
   const ulRef    = useRef(null);
@@ -113,6 +114,7 @@ export default function NavbarAlt() {
 
       <span className={styles.logo}>LJ</span>
 
+      {/* Desktop links */}
       <ul className={styles.links} ref={ulRef}>
         {NAV_LINKS.map(({ label, href }, i) => (
           <li key={label} style={{ position: 'relative' }}>
@@ -140,6 +142,43 @@ export default function NavbarAlt() {
           </svg>
         </Motion.li>
       </ul>
+
+      {/* Hamburger — mobile only */}
+      <button
+        className={styles.hamburger}
+        onClick={() => setMenuOpen(o => !o)}
+        aria-label="Toggle menu"
+        aria-expanded={menuOpen}
+      >
+        <span className={[styles.bar, menuOpen ? styles.barOpen1 : ''].filter(Boolean).join(' ')} />
+        <span className={[styles.bar, menuOpen ? styles.barOpen2 : ''].filter(Boolean).join(' ')} />
+        <span className={[styles.bar, menuOpen ? styles.barOpen3 : ''].filter(Boolean).join(' ')} />
+      </button>
+
+      {/* Mobile dropdown */}
+      <AnimatePresence>
+        {menuOpen && (
+          <Motion.ul
+            className={styles.mobileMenu}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            {NAV_LINKS.map(({ label, href }, i) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  className={[styles.mobileLink, i === activeIdx ? styles.mobileLinkActive : ''].filter(Boolean).join(' ')}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </Motion.ul>
+        )}
+      </AnimatePresence>
     </Motion.nav>
   );
 }

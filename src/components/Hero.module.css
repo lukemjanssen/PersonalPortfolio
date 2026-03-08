@@ -168,8 +168,8 @@
 .ctaLabel {
   position: relative;
   z-index: 1;
-  padding: 0.8rem 5rem 0.8rem 6rem;
-  font-size: 0.9rem;
+  padding: 0.8rem clamp(2.5rem, 7vw, 5rem) 0.8rem clamp(3rem, 8vw, 6rem);
+  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
   font-weight: 500;
   letter-spacing: 0.08em;
   color: var(--clr-accent-soft);

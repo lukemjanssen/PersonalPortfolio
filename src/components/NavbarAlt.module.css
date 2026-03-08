@@ -185,3 +185,100 @@
   fill: none;
   opacity: 0.85;
 }
+
+/* ── Mobile — compress nav to fit smaller screens ── */
+@media (max-width: 600px) {
+  .nav {
+    gap: 1rem;
+    padding: 0.7rem 3.5rem 0.7rem 1.2rem;
+  }
+
+  /* Hide desktop links on mobile */
+  .links {
+    display: none;
+  }
+
+  /* Show hamburger on mobile */
+  .hamburger {
+    display: flex;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav {
+    padding: 0.6rem 3rem 0.6rem 1rem;
+  }
+}
+
+/* ── Hamburger button ── */
+.hamburger {
+  display: none; /* hidden on desktop */
+  position: relative;
+  z-index: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.bar {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+}
+
+/* X animation when open */
+.barOpen1 { transform: translateY(6.5px) rotate(45deg); }
+.barOpen2 { opacity: 0; transform: scaleX(0); }
+.barOpen3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── Mobile dropdown menu ── */
+.mobileMenu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 160px;
+  /* Same glass treatment as the nav itself */
+  background: rgba(14, 16, 20, 0.82);
+  backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0 4px 4px 4px;
+  overflow: hidden;
+  z-index: 200;
+}
+
+.mobileLink {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.mobileLink:last-child { border-bottom: none; }
+
+.mobileLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mobileLinkActive {
+  color: #fff;
+  background: rgba(106, 91, 174, 0.15);
+}
