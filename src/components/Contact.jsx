@@ -99,7 +99,7 @@ export default function Contact() {
           </Motion.a>
         </MotionDiv>
 
-        {/* ── Right column: social links ── */}
+        {/* ── Right column: socials ── */}
         <MotionDiv
           className={styles.right}
           variants={colVariants}
