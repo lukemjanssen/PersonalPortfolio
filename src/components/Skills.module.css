@@ -61,7 +61,7 @@
   height: auto;
   transform: scale(-1, -1);
   transform-origin: center center;
-  filter: invert(1) brightness(0.1) blur(0.6px);
+  filter: invert(1) brightness(0.12);
   opacity: 0.9;
 }
 
@@ -116,7 +116,7 @@
   /* No transform — natural SVG orientation, same as Hero wave.
      Dense end is at bottom-right, matching Hero's dense bottom. */
   transform-origin: center center;
-  filter: invert(1) brightness(0.1) blur(0.6px);
+  filter: invert(1) brightness(0.12);
   opacity: 0.9;
 }
 
@@ -160,7 +160,7 @@
 }
 
 .headingEdge {
-  stroke: rgba(13, 14, 13, 0.45);
+  stroke: rgba(13, 14, 13, 0.70);
   stroke-width: 2;
   fill: none;
 }
@@ -209,7 +209,7 @@
 .scrollArrowWrap {
   /* Sits just below the banner, centred across its full width */
   position: absolute;
-  bottom: -5rem; /* gap below the banner edge — desktop */
+  bottom: -3.5rem; /* gap below the banner edge — desktop */
   left: 0;
   right: 0;
   display: flex;
@@ -237,7 +237,7 @@
 
 @media (max-width: 640px) {
   .scrollArrowWrap {
-    bottom: -7rem; /* extra gap on mobile where banner and list are closer together */
+    bottom: -5rem; /* extra gap on mobile where banner and list are closer together */
   }
 }
 

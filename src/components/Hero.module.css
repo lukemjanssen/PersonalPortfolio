@@ -23,7 +23,6 @@
   z-index: 3;
   pointer-events: none;
   opacity: 1;
-  filter: blur(0.6px);
   /* Radial fade centred on the bottom-right corner — where the wave
      staircase is densest and meets the Hero/Skills seam. Mirrors the
      Skills section's mask which anchors at bottom-left. */
@@ -155,7 +154,7 @@
 }
 
 .ctaEdge {
-  stroke: rgba(255, 255, 255, 0.52);
+  stroke: rgba(255, 255, 255, 0.76);
   stroke-width: 1.5;
   fill: none;
 }
