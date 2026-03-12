@@ -137,7 +137,7 @@ export default function Hero({ navRef }) {
             const naturalY = ctaR.top - 12;
             const naturalW = ctaR.width + 150;   // spacer's CSS-clamped width
             const dockedW  = naturalW;   // full navbar width when docked
-            const dockedX  = navR.left + navR.width * (1600 / 2100);
+            const dockedX  = navR.left + navR.width * (1750 / 2100);
             const dockedY  = navR.top;
 
             // Set motion values BEFORE setting ctaNatural so the CTA renders
