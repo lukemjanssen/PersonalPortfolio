@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import './index.css';
 import NavbarAlt from './components/NavbarAlt';
 import Hero     from './components/Hero';
@@ -6,20 +7,15 @@ import Projects from './components/Projects';
 import Contact  from './components/Contact';
 
 export default function App() {
+  const navRef = useRef(null);
+
   return (
     <>
-      <NavbarAlt />
+      <NavbarAlt navRef={navRef} />
       <main>
-        {/* Dark hero — white pill pattern grows up from the bottom edge */}
-        <Hero />
-
-        {/* Skills — light section, immediately below hero fold */}
+        <Hero navRef={navRef} />
         <Skills />
-
-        {/* GitHub projects — dark section with card grid */}
         <Projects />
-
-        {/* Contact — light section, continues the alternating pattern */}
         <Contact />
       </main>
     </>

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion as Motion } from 'framer-motion';
+import { motion as Motion, useScroll, useMotionValue } from 'framer-motion';
 import styles from './Hero.module.css';
 import VectorSrc from '../assets/newvector.svg';
 
@@ -91,7 +91,7 @@ function WaveName({ word, rowOffset = 0, marginRight = 0, forwardRef = null }) {
   );
 }
 
-export default function Hero() {
+export default function Hero({ navRef }) {
   const heroRef  = useRef(null);
   const waveRef  = useRef(null);
 
@@ -100,7 +100,15 @@ export default function Hero() {
   const tagRef   = useRef(null);
   const ctaRef   = useRef(null);
 
-  const [mr, setMr] = useState(null); // null = not yet computed
+  const [mr, setMr]               = useState(null);
+  const [docked, setDocked]       = useState(null);
+  const [ctaNatural, setCtaNatural] = useState(null);
+
+  // Motion values initialised to off-screen; set to correct position in recalc
+  // before ctaNatural is set, so by the time the CTA renders the values are right.
+  const mvX = useMotionValue(-9999);
+  const mvY = useMotionValue(-9999);
+  const mvW = useMotionValue(0);
 
   const recalcRef = useRef(null);
 
@@ -110,40 +118,122 @@ export default function Hero() {
         const luk = computeWaveMR(lukRef,  waveRef, 224);
         const jan = computeWaveMR(janRef,  waveRef, 200);
         const tag = computeWaveMR(tagRef,  waveRef, 256);
-        const cta = computeWaveMR(ctaRef,  waveRef, 200);
+        const cta = computeWaveMR(ctaRef,  waveRef, 400);
 
-        // Wave not laid out yet — retry next frame
         if (luk === null || jan === null) {
           requestAnimationFrame(() => recalcRef.current?.());
           return;
         }
 
         setMr({ luk, jan, tag: tag ?? 0, cta: cta ?? 0 });
+
+        const ctaEl = ctaRef?.current;
+        const nav   = navRef?.current;
+        if (nav && ctaEl) {
+          const navR = nav.getBoundingClientRect();
+          const ctaR = ctaEl.getBoundingClientRect();
+          if (ctaR.width > 0) {
+            const naturalX = ctaR.left;
+            const naturalY = ctaR.top;
+            const naturalW = ctaR.width + 150;   // spacer's CSS-clamped width
+            const dockedW  = naturalW;   // full navbar width when docked
+            const dockedX  = navR.left + navR.width * (1600 / 2100);
+            const dockedY  = navR.top;
+
+            // Set motion values BEFORE setting ctaNatural so the CTA renders
+            // at exactly the right position with no spring-from-zero flash.
+            mvX.set(naturalX);
+            mvY.set(naturalY);
+            mvW.set(naturalW);
+
+            setDocked({ x: dockedX, y: dockedY, w: dockedW });
+            setCtaNatural({ x: naturalX, y: naturalY, w: naturalW });
+          }
+        }
       });
     });
-  }, []);
+  }, [navRef, mvX, mvY, mvW]);
 
   useEffect(() => { recalcRef.current = recalc; }, [recalc]);
 
   useEffect(() => {
     const wave = waveRef.current;
     if (!wave) return;
-
     if (wave.complete && wave.naturalWidth > 0) {
       recalc();
     } else {
       wave.addEventListener('load', recalc, { once: true });
     }
-
-    // Re-run after all fonts are decoded — Syne loading shifts row heights
-    // which changes vertical midpoints and thus the wave edge lookup result.
     document.fonts.ready.then(recalc);
-
     const ro = new ResizeObserver(recalc);
     ro.observe(document.documentElement);
     ro.observe(wave);
     return () => ro.disconnect();
   }, [recalc]);
+
+  // Scroll-driven animation
+  const { scrollY } = useScroll();
+  const [heroHeight, setHeroHeight] = useState(500);
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    const m = () => setHeroHeight(el.offsetHeight);
+    m();
+    const ro = new ResizeObserver(m);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const scrollEnd = heroHeight * 0.75;
+
+  // On every scroll tick, update mvX/mvY/mvW directly — no useTransform/useSpring
+  // race condition because we always lerp from the known ctaNatural position.
+  useEffect(() => {
+    if (!ctaNatural || !docked) return;
+    const unsubscribe = scrollY.on('change', (sy) => {
+      const t = Math.max(0, Math.min(1, sy / scrollEnd));
+      mvX.set(ctaNatural.x + (docked.x - ctaNatural.x) * t);
+      mvY.set(ctaNatural.y + (docked.y - ctaNatural.y) * t);
+      mvW.set(ctaNatural.w + (docked.w - ctaNatural.w) * t);
+    });
+    // Reset to natural position when deps change (e.g. resize)
+    mvX.set(ctaNatural.x);
+    mvY.set(ctaNatural.y);
+    mvW.set(ctaNatural.w);
+    return unsubscribe;
+  }, [ctaNatural, docked, scrollY, scrollEnd, mvX, mvY, mvW]);
+
+  // Track whether the CTA is floating over a light-background section.
+  // Compare the section boundaries against the CTA's actual current Y position
+  // (not a hardcoded navbar height) so the switch is accurate at every scroll offset.
+  const [ctaOnLight, setCtaOnLight] = useState(false);
+  useEffect(() => {
+    const LIGHT_SECTIONS = ['skills', 'contact'];
+    const CTA_HEIGHT = 44;
+    const check = () => {
+      const ctaY    = mvY.get();
+      const ctaTop  = ctaY;
+      const ctaBot  = ctaY + CTA_HEIGHT;
+      const isOverLight = LIGHT_SECTIONS.some(id => {
+        const el = document.getElementById(id);
+        if (!el) return false;
+        const { top, bottom } = el.getBoundingClientRect();
+        // CTA overlaps this section when their vertical ranges intersect
+        return top < ctaBot && bottom > ctaTop;
+      });
+      setCtaOnLight(isOverLight);
+    };
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check, { passive: true });
+    const unsubMvY = mvY.on('change', check);
+    const raf = requestAnimationFrame(check);
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+      unsubMvY();
+      cancelAnimationFrame(raf);
+    };
+  }, [mvY]);
 
   return (
     <section id="hero" ref={heroRef} className={styles.hero}>
@@ -165,9 +255,6 @@ export default function Hero() {
           animate={mr ? "show" : "hidden"}
           style={{ opacity: mr ? undefined : 0 }}
         >
-
-          {/* Name rows — marginRight from JS pins each row's right edge
-              to the wave boundary at that row's vertical midpoint. */}
           <WaveName word="Luke"    rowOffset={0} marginRight={mr?.luk ?? 0} forwardRef={lukRef} />
           <WaveName word="Janssen" rowOffset={4} marginRight={mr?.jan ?? 0} forwardRef={janRef} />
 
@@ -180,35 +267,61 @@ export default function Hero() {
             UX/UI Engineer
           </Motion.p>
 
-          <Motion.a
+          {/* Invisible spacer — holds the layout gap for the fixed CTA */}
+          <Motion.div
             ref={ctaRef}
-            href="#projects"
-            className={styles.cta}
+            className={styles.ctaSpacer}
             style={{ marginRight: mr?.cta ?? 0 }}
             variants={item}
-            whileHover={{}}
-            whileTap={{ scale: 0.97 }}
-          >
-            {/* SVG: fixed-pixel viewBox so diagonal is always a fixed width
-                 regardless of how wide the element stretches. Height matches
-                 the rendered pill height (~44px). Diagonal shift = 380px. */}
-            <svg
-              className={styles.ctaBg}
-              viewBox="0 0 2100 44"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <polygon points="500,0 2100,0 1600,44 0,44" className={styles.ctaFill} />
-              <line x1="500" y1="0"  x2="2100" y2="0"  className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
-              <line x1="0"   y1="44" x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
-              <line x1="500" y1="0"  x2="0"    y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
-              <line x1="2100" y1="0" x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
-            </svg>
-            <span className={styles.ctaLabel}>View My Work</span>
-          </Motion.a>
+            aria-hidden="true"
+          />
 
         </Motion.div>
       </div>
+
+      {/* CTA lives OUTSIDE Motion.div.text so Framer Motion's transform on
+          that container can't trap this position:fixed element. */}
+      {mr && !ctaNatural && (
+        <a href="#projects" className={styles.ctaStatic} aria-hidden="true" tabIndex={-1}>
+          <svg className={styles.ctaBg} viewBox="0 0 2100 44" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <clipPath id="cta-clip-static" clipPathUnits="objectBoundingBox">
+                <polygon points="0.2381,0 1,0 0.7619,1 0,1" />
+              </clipPath>
+            </defs>
+            <polygon points="500,0 2100,0 1600,44 0,44" className={styles.ctaFill} />
+            <line x1="500"  y1="0"  x2="2100" y2="0"  className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+            <line x1="0"    y1="44" x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+            <line x1="500"  y1="0"  x2="0"    y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+            <line x1="2100" y1="0"  x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+          </svg>
+          <span className={styles.ctaLabel}>View My Work</span>
+        </a>
+      )}
+
+      {ctaNatural && (
+        <Motion.a
+          href="#projects"
+          className={styles.cta}
+          data-on-light={ctaOnLight || undefined}
+          style={{ x: mvX, y: mvY, width: mvW }}
+          whileTap={{ scale: 0.97 }}
+        >
+          <svg className={styles.ctaBg} viewBox="0 0 2100 44" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <clipPath id="cta-clip" clipPathUnits="objectBoundingBox">
+                <polygon points="0.2381,0 1,0 0.76000,1 0,1" />
+              </clipPath>
+            </defs>
+            <polygon points="500,0 2100,0 1600,44 0,44" className={styles.ctaFill} />
+            <line x1="500"  y1="0"  x2="2100" y2="0"  className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+            <line x1="0"    y1="44" x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+            <line x1="500"  y1="0"  x2="0"    y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+            <line x1="2100" y1="0"  x2="1600" y2="44" className={styles.ctaEdge} vectorEffect="non-scaling-stroke" />
+          </svg>
+          <span className={styles.ctaLabel}>View My Work</span>
+        </Motion.a>
+      )}
 
     </section>
   );

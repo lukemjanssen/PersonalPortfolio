@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { label: 'Contact',  href: '#contact' },
 ];
 
-export default function NavbarAlt() {
+export default function NavbarAlt({ navRef }) {
   const [scrolled, setScrolled]   = useState(false);
   const [onLight, setOnLight]     = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
@@ -99,20 +99,28 @@ export default function NavbarAlt() {
 
   return (
     <Motion.nav
+      ref={navRef}
       className={[styles.nav, scrolled ? styles.scrolled : ''].filter(Boolean).join(' ')}
       data-on-light={onLight ? 'true' : undefined}
       initial={{ x: -40, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
-      {/* Simple SVG polygon — same approach as every other banner.
-          viewBox "0 0 800 56" approximates the nav's rendered pixel ratio.
-          Endpoint 660,56 gives a shallow diagonal visually close to the CTA. */}
-      <svg className={styles.bg} viewBox="0 0 800 56" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="0,0 800,0 660,56 0,56" className={styles.bgFill} />
-        <line x1="0"   y1="0"  x2="800" y2="0"  className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
-        <line x1="0"   y1="56" x2="660" y2="56" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
-        <line x1="800" y1="0"  x2="660" y2="56" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+      {/* Same viewBox and right diagonal as the Hero CTA (viewBox 2100×44,
+          right edge (2100,0)→(1600,44)). The left side is a straight vertical
+          instead of the CTA's left diagonal, since the nav is flush to the
+          screen edge. preserveAspectRatio="none" means both SVGs stretch
+          identically, so the right-edge angle always matches at any width. */}
+      <svg
+        className={styles.bg}
+        viewBox="0 0 2100 44"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <polygon points="0,0 2100,0 1600,44 0,44" className={styles.bgFill} />
+        <line x1="0"    y1="0"  x2="2100" y2="0"  className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+        <line x1="0"    y1="44" x2="1600" y2="44" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
+        <line x1="2100" y1="0"  x2="1600" y2="44" className={styles.bgEdge} vectorEffect="non-scaling-stroke" />
       </svg>
 
       <span className={styles.logo}>LJ</span>

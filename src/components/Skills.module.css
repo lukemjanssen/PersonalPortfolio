@@ -11,7 +11,6 @@
   overflow: hidden;
   padding-top: calc(8rem + 70px + 6rem); /* banner top + banner height + gap to list */
   padding-bottom: calc(68.13vw + 3rem);  /* reserve room for the bottom wave */
-  z-index: 1;
 }
 
 /* ── Top wave — anchored to section top ── */
@@ -61,7 +60,7 @@
   height: auto;
   transform: scale(-1, -1);
   transform-origin: center center;
-  filter: invert(1) brightness(0.1) blur(0.6px);
+  filter: invert(1) brightness(0.1);
   opacity: 0.9;
 }
 
@@ -116,7 +115,7 @@
   /* No transform — natural SVG orientation, same as Hero wave.
      Dense end is at bottom-right, matching Hero's dense bottom. */
   transform-origin: center center;
-  filter: invert(1) brightness(0.1) blur(0.6px);
+  filter: invert(1) brightness(0.1);
   opacity: 0.9;
 }
 

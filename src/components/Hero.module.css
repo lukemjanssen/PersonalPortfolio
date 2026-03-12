@@ -6,7 +6,6 @@
   height: 50svh;
   background: var(--clr-bg-dark);
   overflow: hidden;
-  z-index: 1;
 }
 
 /* ── Wave image ── */
@@ -23,7 +22,6 @@
   z-index: 3;
   pointer-events: none;
   opacity: 1;
-  filter: blur(0.6px);
   /* Radial fade centred on the bottom-right corner — where the wave
      staircase is densest and meets the Hero/Skills seam. Mirrors the
      Skills section's mask which anchors at bottom-left. */
@@ -112,29 +110,82 @@
   font-weight: 400;
 }
 
-/* ── CTA button — parallelogram SVG pill, both sides diagonal ── */
-.cta {
+/* ── CTA — parallelogram pill, animates from hero into the navbar on scroll ── */
+
+/* In-flow version — shown for one frame while ctaNatural is being measured.
+   Visually identical to the fixed version, but participates in document flow
+   so getBoundingClientRect() returns its true hero position. */
+.ctaStatic {
   position: relative;
-  display: inline-flex;
-  align-items: stretch;
-  cursor: pointer;
-  text-decoration: none;
   height: 44px;
+  width: clamp(130px, 18vw, 200px);
+  display: block;
+  text-decoration: none;
+  pointer-events: none; /* non-interactive placeholder */
+  visibility: hidden;   /* invisible — spacer takes the visual slot */
 }
 
-/* Frosted glass blur clipped to the parallelogram */
+/* Fixed version — shown once ctaNatural is known. Framer Motion drives
+   x/y (translateX/Y from top:0 left:0 origin) and width. */
+.cta {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 44px;
+  z-index: 101;
+  text-decoration: none;
+  display: block;
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+/* Glass blur layer — clipped using the SVG clipPath defined inside the CTA's own SVG.
+   clipPathUnits="objectBoundingBox" means it uses the same proportional coords as
+   the polygon, so the clip angle is always geometrically identical at any width. */
 .cta::before {
   content: '';
   position: absolute;
   inset: 0;
-  clip-path: polygon(23.8% 0, 100% 0, 76.2% 100%, 0 100%);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  clip-path: url(#cta-clip);
+  backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
   z-index: 0;
   pointer-events: none;
 }
 
-/* SVG layer — fill + 4 border edges */
+.ctaStatic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: url(#cta-clip-static);
+  backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Top-edge specular shimmer — clipped by the SVG polygon via z-index layering.
+   Starts at 23.8% (= 500/2100 of the viewBox) to hide the left overhang. */
+.cta::after, .ctaStatic::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 23.8%;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.0)  0%,
+    rgba(255,255,255,0.35) 20%,
+    rgba(255,255,255,0.18) 70%,
+    rgba(255,255,255,0.0)  100%
+  );
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* SVG layer — fill + 4 border edges. z-index:1 sits above ::before blur (0)
+   so the semi-transparent fill composites correctly over the backdrop. */
 .ctaBg {
   position: absolute;
   inset: 0;
@@ -142,49 +193,103 @@
   height: 100%;
   overflow: visible;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
+/* Identical to nav .bgFill */
 .ctaFill {
-  fill: rgba(13, 14, 13, 0.92);
+  fill: rgba(16, 17, 16, 0.55);
   transition: fill 0.3s ease;
 }
 
 .cta:hover .ctaFill {
-  fill: rgba(22, 24, 22, 0.98);
+  fill: rgba(10, 11, 10, 0.82);
 }
 
+/* Identical to nav .bgEdge */
 .ctaEdge {
-  stroke: rgba(255, 255, 255, 0.52);
+  stroke: rgba(255, 255, 255, 0.48);
   stroke-width: 1.5;
   fill: none;
+  transition: stroke 0.3s ease;
 }
 
 .cta:hover .ctaEdge {
-  stroke: var(--clr-accent-soft);
+  stroke: rgba(255, 255, 255, 0.62);
 }
 
-/* Text label — padded well clear of both diagonal cuts */
+/* Label — centred in the visible parallelogram.
+   Left cut: x=500/2100=23.8%, right cut: x=1600/2100=76.2%.
+   Matches nav link typography exactly. */
 .ctaLabel {
-  position: relative;
-  z-index: 1;
-  padding: 0.8rem clamp(2.5rem, 7vw, 5rem) 0.8rem clamp(3rem, 8vw, 6rem);
-  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 23.8% 0 23.8%;
+  font-size: 0.875rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  color: var(--clr-accent-soft);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
   white-space: nowrap;
-  text-transform: uppercase;
   transition: color 0.3s ease;
-  text-align: center;
-  width: 100%;
+  pointer-events: none;
+  z-index: 4;
 }
 
 .cta:hover .ctaLabel {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-/* ── Profile image (kept for when photo is added) ── */
+/* ── Light-section variant — identical to nav[data-on-light] ── */
+.cta[data-on-light]::before {
+  backdrop-filter: blur(24px) saturate(1.8) brightness(1.15);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.15);
+}
+
+.cta[data-on-light]::after {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.0)  0%,
+    rgba(255,255,255,0.55) 20%,
+    rgba(255,255,255,0.28) 70%,
+    rgba(255,255,255,0.0)  100%
+  );
+}
+
+.cta[data-on-light] .ctaFill {
+  fill: rgba(240, 242, 245, 0.42);
+}
+
+.cta[data-on-light]:hover .ctaFill {
+  fill: rgba(220, 224, 230, 0.65);
+}
+
+.cta[data-on-light] .ctaEdge {
+  stroke: rgba(13, 14, 13, 0.38);
+}
+
+.cta[data-on-light]:hover .ctaEdge {
+  stroke: rgba(13, 14, 13, 0.55);
+}
+
+.cta[data-on-light] .ctaLabel {
+  color: rgba(13, 14, 13, 0.65);
+}
+
+.cta[data-on-light]:hover .ctaLabel {
+  color: rgba(13, 14, 13, 0.95);
+}
+
+/* Invisible spacer — same size as the CTA, stays in flow so the hero
+   layout doesn't collapse when the CTA becomes position:fixed */
+.ctaSpacer {
+  height: 44px;
+  width: clamp(130px, 18vw, 200px);
+  pointer-events: none;
+  visibility: hidden;
+}/* ── Profile image (kept for when photo is added) ── */
 .imageWrap {
   position: relative;
   width: 220px;

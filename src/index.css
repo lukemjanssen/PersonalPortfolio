@@ -40,9 +40,14 @@ body {
   background: var(--clr-bg-dark);
   color: var(--clr-text-primary);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
   font-weight: 400;
   letter-spacing: -0.015em;
+}
+
+/* Contain horizontal overflow on the layout wrapper, NOT body —
+   overflow-x: hidden on body breaks position:fixed touch events on iOS Safari */
+#root {
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
