@@ -279,24 +279,26 @@ export default function Skills() {
         initial={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
       >
-        {/* Text content */}
-        <div className={styles.bioText_block}>
-          <p className={styles.bioName}>About Me</p>
-          <p className={styles.bioRole}>Full-stack Developer &amp; UI/UX Engineer</p>
-          <p className={styles.bioText}>
-            I design and build end-to-end — from Figma prototypes and design systems
-            to production React applications. Currently at Too Much Info; open to new opportunities.
-          </p>
-          <p className={styles.bioMeta}>Chicago, IL · lj@morrisdesign.net</p>
-        </div>
+        <div className={styles.bioCard}>
+          {/* Text content */}
+          <div className={styles.bioText_block}>
+            <p className={styles.bioName}>About Me</p>
+            <p className={styles.bioRole}>Full-stack Developer &amp; UI/UX Engineer</p>
+            <p className={styles.bioText}>
+              I design and build end-to-end — from Figma prototypes and design systems
+              to production React applications. Currently at Too Much Info; open to new opportunities.
+            </p>
+            <p className={styles.bioMeta}>Chicago, IL · lj@morrisdesign.net</p>
+          </div>
 
-        {/* Angular photo — clipped to a skewed parallelogram matching the site's geometry */}
-        <div className={styles.bioPhoto}>
-          <img
-            src={PhotoSrc}
-            alt="Luke Janssen"
-            className={styles.bioPhotoImg}
-          />
+          {/* Angular photo — clipped to a skewed parallelogram matching the site's geometry */}
+          <div className={styles.bioPhoto}>
+            <img
+              src={PhotoSrc}
+              alt="Luke Janssen"
+              className={styles.bioPhotoImg}
+            />
+          </div>
         </div>
       </MotionDiv>
 

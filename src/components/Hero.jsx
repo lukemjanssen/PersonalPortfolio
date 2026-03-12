@@ -203,38 +203,6 @@ export default function Hero({ navRef }) {
     return unsubscribe;
   }, [ctaNatural, docked, scrollY, scrollEnd, mvX, mvY, mvW]);
 
-  // Track whether the CTA is floating over a light-background section.
-  // Compare the section boundaries against the CTA's actual current Y position
-  // (not a hardcoded navbar height) so the switch is accurate at every scroll offset.
-  const [ctaOnLight, setCtaOnLight] = useState(false);
-  useEffect(() => {
-    const LIGHT_SECTIONS = ['contact'];
-    const CTA_HEIGHT = 44;
-    const check = () => {
-      const ctaY    = mvY.get();
-      const ctaTop  = ctaY;
-      const ctaBot  = ctaY + CTA_HEIGHT;
-      const isOverLight = LIGHT_SECTIONS.some(id => {
-        const el = document.getElementById(id);
-        if (!el) return false;
-        const { top, bottom } = el.getBoundingClientRect();
-        // CTA overlaps this section when their vertical ranges intersect
-        return top < ctaBot && bottom > ctaTop;
-      });
-      setCtaOnLight(isOverLight);
-    };
-    window.addEventListener('scroll', check, { passive: true });
-    window.addEventListener('resize', check, { passive: true });
-    const unsubMvY = mvY.on('change', check);
-    const raf = requestAnimationFrame(check);
-    return () => {
-      window.removeEventListener('scroll', check);
-      window.removeEventListener('resize', check);
-      unsubMvY();
-      cancelAnimationFrame(raf);
-    };
-  }, [mvY]);
-
   return (
     <section id="hero" ref={heroRef} className={styles.hero}>
 
@@ -303,7 +271,6 @@ export default function Hero({ navRef }) {
         <Motion.a
           href="#projects"
           className={styles.cta}
-          data-on-light={ctaOnLight || undefined}
           style={{ x: mvX, y: mvY, width: mvW }}
           whileTap={{ scale: 0.97 }}
         >

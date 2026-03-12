@@ -383,11 +383,21 @@
   transform: translateY(50%);
   left: clamp(3rem, 10vw, 10rem);
   z-index: 2;
+}
+
+/* Rounded glass card wrapping all bio content */
+.bioCard {
   display: flex;
   flex-direction: row;
   align-items: stretch;
   gap: clamp(1.5rem, 3vw, 3rem);
-
+  padding: clamp(1.25rem, 2vw, 2rem) clamp(1.25rem, 2vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 1.25rem;
+  background: rgba(16, 17, 16, 0.35);
+  backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  overflow: hidden;
 }
 
 /* Text sub-block */
@@ -475,6 +485,8 @@
 
   .bio {
     left: clamp(1.5rem, 4vw, 3rem);
+  }
+  .bioCard {
     gap: 1.5rem;
   }
   .bioText_block {
@@ -513,9 +525,13 @@
     max-width: none;
     margin: 2.5rem auto 0;
     padding: 0 1rem;
-    flex-direction: column;   /* stack vertically */
+  }
+
+  .bioCard {
+    flex-direction: column;
     align-items: center;
     gap: 1.25rem;
+    padding: 1.25rem;
   }
 
   .bioText_block {

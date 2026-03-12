@@ -48,7 +48,7 @@
   height: auto;     /* natural aspect ratio — never distorted */
   transform: scale(-1, -1);
   transform-origin: center center;
-  opacity: 0.55;
+  opacity: 1;
 }
 
 .container {
