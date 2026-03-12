@@ -118,7 +118,7 @@ export default function Hero({ navRef }) {
         const luk = computeWaveMR(lukRef,  waveRef, 224);
         const jan = computeWaveMR(janRef,  waveRef, 200);
         const tag = computeWaveMR(tagRef,  waveRef, 256);
-        const cta = computeWaveMR(ctaRef,  waveRef, 400);
+        const cta = computeWaveMR(ctaRef,  waveRef, 500);
 
         if (luk === null || jan === null) {
           requestAnimationFrame(() => recalcRef.current?.());
@@ -133,8 +133,8 @@ export default function Hero({ navRef }) {
           const navR = nav.getBoundingClientRect();
           const ctaR = ctaEl.getBoundingClientRect();
           if (ctaR.width > 0) {
-            const naturalX = ctaR.left;
-            const naturalY = ctaR.top;
+            const naturalX = ctaR.left - 20;
+            const naturalY = ctaR.top - 12;
             const naturalW = ctaR.width + 150;   // spacer's CSS-clamped width
             const dockedW  = naturalW;   // full navbar width when docked
             const dockedX  = navR.left + navR.width * (1600 / 2100);
@@ -208,7 +208,7 @@ export default function Hero({ navRef }) {
   // (not a hardcoded navbar height) so the switch is accurate at every scroll offset.
   const [ctaOnLight, setCtaOnLight] = useState(false);
   useEffect(() => {
-    const LIGHT_SECTIONS = ['skills', 'contact'];
+    const LIGHT_SECTIONS = ['contact'];
     const CTA_HEIGHT = 44;
     const check = () => {
       const ctaY    = mvY.get();

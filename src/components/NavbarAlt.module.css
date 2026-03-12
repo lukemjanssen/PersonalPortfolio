@@ -17,8 +17,8 @@
   position: absolute;
   inset: 0;
   clip-path: polygon(0 0, 100% 0, 76.2% 100%, 0 100%);
-  backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(0.75);
+  backdrop-filter: blur(32px) saturate(1.8) brightness(0.72);
+  -webkit-backdrop-filter: blur(32px) saturate(1.8) brightness(0.72);
   z-index: 0;
   pointer-events: none;
 }
@@ -54,12 +54,12 @@
 }
 
 .bgFill {
-  fill: rgba(16, 17, 16, 0.55);
+  fill: rgba(16, 17, 16, 0.35);
   transition: fill 0.3s ease;
 }
 
 .scrolled .bgFill {
-  fill: rgba(10, 11, 10, 0.82);
+  fill: rgba(16, 17, 16, 0.55);
 }
 
 .bgEdge {
@@ -71,43 +71,6 @@
 
 .scrolled .bgEdge {
   stroke: rgba(255, 255, 255, 0.62);
-}
-
-/* ── Light section (data-on-light) — frosted white glass ── */
-.nav[data-on-light]::before {
-  backdrop-filter: blur(24px) saturate(1.8) brightness(1.15);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.15);
-}
-
-.nav[data-on-light]::after {
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0.0)  0%,
-    rgba(255,255,255,0.55) 20%,
-    rgba(255,255,255,0.28) 70%,
-    rgba(255,255,255,0.0)  100%
-  );
-}
-
-.nav[data-on-light] .bgFill {
-  fill: rgba(240, 242, 245, 0.42);
-}
-
-.nav[data-on-light] .bgEdge {
-  stroke: rgba(13, 14, 13, 0.38);
-}
-
-.nav[data-on-light] .logo {
-  color: var(--clr-accent);
-}
-
-.nav[data-on-light] .link {
-  color: rgba(13, 14, 13, 0.65);
-}
-
-.nav[data-on-light] .link:hover,
-.nav[data-on-light] .linkActive {
-  color: rgba(13, 14, 13, 0.95);
 }
 
 /* ── Content sits above all layers ── */

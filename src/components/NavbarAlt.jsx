@@ -12,7 +12,6 @@ const NAV_LINKS = [
 
 export default function NavbarAlt({ navRef }) {
   const [scrolled, setScrolled]   = useState(false);
-  const [onLight, setOnLight]     = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
   const [menuOpen, setMenuOpen]   = useState(false);
 
@@ -38,28 +37,6 @@ export default function NavbarAlt({ navRef }) {
     const handler = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
-  }, []);
-
-  /* Switch to opaque dark style when navbar overlaps a light section */
-  useEffect(() => {
-    const NAV_HEIGHT = 80;
-    const check = () => {
-      const sections = ['skills', 'contact'].map(id => document.getElementById(id));
-      const isOverLight = sections.some(el => {
-        if (!el) return false;
-        const { top, bottom } = el.getBoundingClientRect();
-        return top < NAV_HEIGHT && bottom > 0;
-      });
-      setOnLight(isOverLight);
-    };
-    window.addEventListener('scroll', check, { passive: true });
-    window.addEventListener('resize', check, { passive: true });
-    const raf = requestAnimationFrame(check);
-    return () => {
-      window.removeEventListener('scroll', check);
-      window.removeEventListener('resize', check);
-      cancelAnimationFrame(raf);
-    };
   }, []);
 
   /* Scroll-position active tracking — on every scroll event, find which section's
@@ -101,7 +78,6 @@ export default function NavbarAlt({ navRef }) {
     <Motion.nav
       ref={navRef}
       className={[styles.nav, scrolled ? styles.scrolled : ''].filter(Boolean).join(' ')}
-      data-on-light={onLight ? 'true' : undefined}
       initial={{ x: -40, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
